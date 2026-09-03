@@ -1,6 +1,7 @@
 <template>
   <SjfLabel
     :label="props.label"
+    :helper="props.helper"
     :label-option="props.labelOption"
     :col-span="props.colSpan ?? 1"
     :row-span="props.rowSpan ?? 1"
