@@ -1,0 +1,49 @@
+@layer sjf-base {
+  :where(button, input, select, textarea) {
+    box-sizing: border-box;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    outline: 0;
+    background: transparent;
+    box-shadow: none;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  :where(button, input, select, textarea):focus,
+  :where(button, input, select, textarea):focus-visible {
+    outline: 0;
+    box-shadow: none;
+  }
+
+  :where(button) {
+    padding: 0;
+    cursor: pointer;
+  }
+
+  :where(button, input, select, textarea):disabled {
+    cursor: default;
+  }
+
+  :where(input, textarea)::placeholder {
+    color: inherit;
+    opacity: 0.6;
+  }
+
+  :where(input[type='search'])::-webkit-search-decoration,
+  :where(input[type='search'])::-webkit-search-cancel-button,
+  :where(input[type='search'])::-webkit-search-results-button,
+  :where(input[type='search'])::-webkit-search-results-decoration {
+    -webkit-appearance: none;
+  }
+
+  :where(input[type='number'])::-webkit-inner-spin-button,
+  :where(input[type='number'])::-webkit-outer-spin-button {
+    margin: 0;
+    -webkit-appearance: none;
+  }
+}

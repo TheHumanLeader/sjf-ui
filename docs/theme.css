@@ -35,9 +35,15 @@ body {
 }
 
 .docs-search:focus-within,
-.doc-input:focus,
-.doc-control:focus {
+.doc-control:focus,
+.doc-input:not(.doc-input--m3):not(.doc-input--embedded):focus {
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--md-sys-color-primary) 10%, transparent);
+}
+
+.doc-input--m3:focus,
+.doc-input--embedded:focus {
+  outline: 0;
+  box-shadow: none;
 }
 
 .docs-sidebar {
