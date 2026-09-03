@@ -30,7 +30,7 @@
     <section class="section">
       <div class="section-head">
         <h2>Material 3 Color</h2>
-        <p>不重新发明颜色语义，只规范怎么使用。</p>
+        <p>颜色语义遵循 Material 3，但 SJF-UI 有自己的官方主题性格。</p>
       </div>
       <div class="grid-2">
         <article class="spec-card">
@@ -40,6 +40,28 @@
         <article class="spec-card">
           <h3>办公化约束</h3>
           <p>主色只用于真正强调；大面积背景使用 surface 系列；边界以 outline-variant 为主；避免无意义装饰性色块。</p>
+        </article>
+      </div>
+
+      <div class="theme-preset-grid">
+        <article class="theme-preset theme-preset--pink">
+          <div class="theme-preset__visual" aria-hidden="true">
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <div>
+            <strong>Pink · 默认主题</strong>
+            <p>偏玫粉 / 樱粉的浅色办公主题。粉色负责强调，页面主体保持白与浅中性色，不做“满屏少女粉”。</p>
+          </div>
+        </article>
+
+        <article class="theme-preset theme-preset--starry">
+          <div class="theme-preset__visual" aria-hidden="true">
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <div>
+            <strong>Starry · 星空主题</strong>
+            <p>深夜蓝作为 surface，星光蓝为 primary，冷青作为 tertiary。适合暗色环境，同时保留办公界面的清晰层级。</p>
+          </div>
         </article>
       </div>
     </section>
