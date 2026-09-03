@@ -1,6 +1,6 @@
 import './styles/index.css'
 
-export { default as SJFUI, SJFUI as SjfUI } from './sjfui'
+export { default } from './sjfui'
 export * from './sjfui'
 
 export { default as SjfForm } from './components/Form/index.vue'
