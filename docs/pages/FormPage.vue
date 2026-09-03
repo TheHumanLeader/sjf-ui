@@ -96,6 +96,62 @@
 
     <section class="section">
       <div class="section-head">
+        <h2>Row Span · 跨行布局</h2>
+        <p>Label Cell 和 Control Cell 都可以独立设置 rowSpan。左侧字段跨两行，右侧正常排两组字段。</p>
+      </div>
+
+      <article class="demo-card">
+        <div class="demo-titlebar">
+          <strong>4-column · rowSpan=2</strong>
+          <code>horizontal-box</code>
+        </div>
+        <div class="demo-stage">
+          <SjfForm
+            :columns="4"
+            label-mode="horizontal-box"
+            :gap="0"
+            :label-option="{ colSpan: 1 }"
+          >
+            <SjfInput
+              v-model="rowSpanForm.department"
+              label="部门说明"
+              :label-option="{ rowSpan: 2 }"
+              :col-span="1"
+              :row-span="2"
+            />
+
+            <SjfInput
+              v-model="rowSpanForm.owner"
+              label="负责人"
+              :col-span="1"
+            />
+
+            <SjfInput
+              v-model="rowSpanForm.phone"
+              label="联系电话"
+              :col-span="1"
+            />
+          </SjfForm>
+        </div>
+      </article>
+
+      <div class="code-card">
+        <pre><code>&lt;SjfForm :columns="4" label-mode="horizontal-box" :gap="0"&gt;
+  &lt;SjfInput
+    label="部门说明"
+    :label-option="{ colSpan: 1, rowSpan: 2 }"
+    :col-span="1"
+    :row-span="2"
+  /&gt;
+
+  &lt;SjfInput label="负责人" :col-span="1" /&gt;
+  &lt;SjfInput label="联系电话" :col-span="1" /&gt;
+&lt;/SjfForm&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
         <h2>labelOption 的继承</h2>
         <p>Form 提供默认值，某个字段只覆盖自己需要改的部分。</p>
       </div>
@@ -124,8 +180,8 @@
         <article class="spec-card">
           <h3>Horizontal</h3>
           <p>
-            <span class="inline-code">labelOption.colSpan</span> 控制 Label Cell；
-            <span class="inline-code">colSpan</span> 控制 Control Cell。
+            <span class="inline-code">labelOption.colSpan / rowSpan</span> 控制 Label Cell；
+            <span class="inline-code">colSpan / rowSpan</span> 控制 Control Cell。
           </p>
         </article>
         <article class="spec-card">
@@ -153,6 +209,12 @@ const form = reactive({
   address: '合肥市 · 软件园',
   phone: '13800000000',
   status: '在职',
+})
+
+const rowSpanForm = reactive({
+  department: '研发中心 / 前端平台组',
+  owner: '王小明',
+  phone: '13900000000',
 })
 </script>
 
