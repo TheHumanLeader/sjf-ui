@@ -9,7 +9,7 @@
     <section class="section">
       <div class="section-head">
         <h2>同一份结构，直接切 Label Mode</h2>
-        <p>下面始终是 5 列原始 Grid。切换模式时不改字段代码。</p>
+        <p>下面始终是 5 列原始 Grid。切换模式时不改字段代码；Label 和内容文本还可以分别控制左右对齐。</p>
       </div>
 
       <div class="hero-actions form-mode-actions">
@@ -25,15 +25,46 @@
         </button>
       </div>
 
+      <div class="align-toolbar">
+        <div class="align-group">
+          <strong>Label 对齐</strong>
+          <button
+            v-for="item in alignChoices"
+            :key="`label-${item}`"
+            type="button"
+            class="secondary-action size-switch"
+            :class="{ selected: labelAlign === item }"
+            @click="labelAlign = item"
+          >
+            {{ item }}
+          </button>
+        </div>
+        <div class="align-group">
+          <strong>Content 对齐</strong>
+          <button
+            v-for="item in alignChoices"
+            :key="`content-${item}`"
+            type="button"
+            class="secondary-action size-switch"
+            :class="{ selected: contentAlign === item }"
+            @click="contentAlign = item"
+          >
+            {{ item }}
+          </button>
+        </div>
+      </div>
+
       <article class="demo-card">
         <div class="demo-titlebar">
           <strong>5-column Raw Grid</strong>
-          <code>labelMode="{{ mode }}"</code>
+          <code>label="{{ labelAlign }}" · content="{{ contentAlign }}"</code>
         </div>
         <div class="demo-stage">
           <SjfForm
             :columns="5"
             :label-mode="mode"
+            :label-align="labelAlign"
+            :content-align="contentAlign"
             :gap="mode === 'horizontal-box' ? 0 : 'sm'"
             :label-option="{ colSpan: 1 }"
           >
@@ -78,16 +109,17 @@
       </article>
 
       <div class="code-card">
-        <pre><code>&lt;SjfForm :columns="5" :label-mode="mode" gap="sm"&gt;
-  &lt;SjfInput
-    label="姓名"
-    :label-option="{ colSpan: 1, required: true }"
-    :col-span="2"
-  /&gt;
-
+        <pre><code>&lt;SjfForm
+  :columns="5"
+  label-mode="horizontal-box"
+  label-align="right"
+  content-align="left"
+&gt;
+  &lt;SjfInput label="姓名" :col-span="2" /&gt;
   &lt;SjfInput
     label="工号"
-    :label-option="{ colSpan: 1 }"
+    label-align="center"
+    content-align="right"
     :col-span="1"
   /&gt;
 &lt;/SjfForm&gt;</code></pre>
@@ -166,6 +198,7 @@
         </div>
         <div class="callout">
           优先级：Label 直接属性 &gt; 当前组件 labelOption &gt; Form labelOption / labelMode &gt; 默认 m3。
+          对齐同样支持 Form 默认值和字段局部覆盖。
         </div>
       </article>
     </section>
@@ -197,10 +230,13 @@
 import { reactive, ref } from 'vue'
 import SjfForm from '@/components/Form/index.vue'
 import SjfInput from '@/components/Input/index.vue'
-import type { SjfLabelMode } from '@/components/Label'
+import type { SjfHorizontalAlign, SjfLabelMode } from '@/components/Label'
 
 const modes: SjfLabelMode[] = ['m3', 'horizontal', 'horizontal-box']
+const alignChoices: SjfHorizontalAlign[] = ['left', 'center', 'right']
 const mode = ref<SjfLabelMode>('m3')
+const labelAlign = ref<SjfHorizontalAlign>('left')
+const contentAlign = ref<SjfHorizontalAlign>('left')
 
 const form = reactive({
   name: '张三',
@@ -221,6 +257,24 @@ const rowSpanForm = reactive({
 <style scoped>
 .form-mode-actions {
   margin: 0 0 14px;
+}
+
+.align-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sjf-gap-nm);
+  margin-bottom: 14px;
+}
+
+.align-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--sjf-gap-sm);
+}
+
+.align-group strong {
+  font-size: 11px;
 }
 
 .size-switch {
