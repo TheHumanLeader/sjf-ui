@@ -5,6 +5,7 @@
     :style="rootStyle"
     :data-mode="resolvedMode"
     :data-size="effectiveSize"
+    :data-error-display="resolvedErrorDisplay"
   >
     <template v-if="resolvedMode === 'm3'">
       <div class="sjf-label__stack">
@@ -25,11 +26,21 @@
           >
             <slot name="label">{{ props.label }}</slot>
           </LabelCaption>
+
+          <span v-if="showErrorIndicator" class="sjf-label__m3-error-indicator">
+            <LabelErrorIndicator
+              :message="errorMessage"
+              :disabled="resolvedDisabled"
+            />
+          </span>
         </div>
 
         <LabelHelper
-          v-if="resolvedHelper"
-          class="sjf-label__helper-offset"
+          v-if="showHelper"
+          :class="[
+            'sjf-label__helper-offset',
+            { 'is-m3-error-floating': floatingM3ErrorHelper },
+          ]"
           :text="resolvedHelper"
           :error="resolvedError"
           :disabled="resolvedDisabled"
@@ -48,12 +59,20 @@
           >
             <slot name="label">{{ props.label }}</slot>
           </LabelCaption>
+          <LabelErrorIndicator
+            v-if="showErrorIndicator"
+            :message="errorMessage"
+            :disabled="resolvedDisabled"
+          />
         </div>
 
         <div class="sjf-label__body sjf-label__grid-control-cell">
           <slot />
+          <span v-if="showErrorIndicator && !hasLabel" class="sjf-label__content-error-indicator">
+            <LabelErrorIndicator :message="errorMessage" :disabled="resolvedDisabled" />
+          </span>
           <LabelHelper
-            v-if="resolvedHelper"
+            v-if="showHelper"
             :text="resolvedHelper"
             :error="resolvedError"
             :disabled="resolvedDisabled"
@@ -73,12 +92,20 @@
           >
             <slot name="label">{{ props.label }}</slot>
           </LabelCaption>
+          <LabelErrorIndicator
+            v-if="showErrorIndicator"
+            :message="errorMessage"
+            :disabled="resolvedDisabled"
+          />
         </div>
 
         <div class="sjf-label__box-content sjf-label__grid-control-cell">
           <slot />
+          <span v-if="showErrorIndicator && !hasLabel" class="sjf-label__content-error-indicator">
+            <LabelErrorIndicator :message="errorMessage" :disabled="resolvedDisabled" />
+          </span>
           <LabelHelper
-            v-if="resolvedHelper"
+            v-if="showHelper"
             :text="resolvedHelper"
             :error="resolvedError"
             :disabled="resolvedDisabled"
@@ -89,20 +116,29 @@
 
     <template v-else-if="resolvedMode === 'vertical'">
       <div class="sjf-label__stack">
-        <LabelCaption
-          v-if="hasLabel"
-          :text="props.label"
-          :required="resolvedRequired"
-          :disabled="resolvedDisabled"
-          :error="resolvedError"
-        >
-          <slot name="label">{{ props.label }}</slot>
-        </LabelCaption>
+        <div v-if="hasLabel" class="sjf-label__label-line">
+          <LabelCaption
+            :text="props.label"
+            :required="resolvedRequired"
+            :disabled="resolvedDisabled"
+            :error="resolvedError"
+          >
+            <slot name="label">{{ props.label }}</slot>
+          </LabelCaption>
+          <LabelErrorIndicator
+            v-if="showErrorIndicator"
+            :message="errorMessage"
+            :disabled="resolvedDisabled"
+          />
+        </div>
 
         <div class="sjf-label__body">
           <slot />
+          <span v-if="showErrorIndicator && !hasLabel" class="sjf-label__content-error-indicator">
+            <LabelErrorIndicator :message="errorMessage" :disabled="resolvedDisabled" />
+          </span>
           <LabelHelper
-            v-if="resolvedHelper"
+            v-if="showHelper"
             :text="resolvedHelper"
             :error="resolvedError"
             :disabled="resolvedDisabled"
@@ -122,12 +158,20 @@
           >
             <slot name="label">{{ props.label }}</slot>
           </LabelCaption>
+          <LabelErrorIndicator
+            v-if="showErrorIndicator"
+            :message="errorMessage"
+            :disabled="resolvedDisabled"
+          />
         </div>
 
         <div class="sjf-label__box-content">
           <slot />
+          <span v-if="showErrorIndicator && !hasLabel" class="sjf-label__content-error-indicator">
+            <LabelErrorIndicator :message="errorMessage" :disabled="resolvedDisabled" />
+          </span>
           <LabelHelper
-            v-if="resolvedHelper"
+            v-if="showHelper"
             :text="resolvedHelper"
             :error="resolvedError"
             :disabled="resolvedDisabled"
@@ -145,9 +189,11 @@ import { useSjfFormContext } from '../Form/context'
 import {
   SJF_LABEL_SIZE_RECIPE,
   type SjfHorizontalAlign,
+  type SjfLabelErrorDisplay,
   type SjfLabelProps,
 } from './index'
 import LabelCaption from './cps/LabelCaption.vue'
+import LabelErrorIndicator from './cps/LabelErrorIndicator.vue'
 import LabelHelper from './cps/LabelHelper.vue'
 
 const props = defineProps<SjfLabelProps>()
@@ -180,6 +226,9 @@ const resolvedError = computed(() =>
 const resolvedHelper = computed(() =>
   props.helper ?? ownOption.value.helper ?? formOption.value.helper ?? '',
 )
+const resolvedErrorDisplay = computed<SjfLabelErrorDisplay>(() =>
+  props.errorDisplay ?? ownOption.value.errorDisplay ?? formOption.value.errorDisplay ?? 'message',
+)
 const resolvedLabelAlign = computed<SjfHorizontalAlign>(() =>
   props.labelAlign ?? ownOption.value.align ?? formOption.value.align ?? 'left',
 )
@@ -211,6 +260,19 @@ const combinedRowSpan = computed(() =>
 
 const hasLabel = computed(() => Boolean(props.label || slots.label))
 const isShrunk = computed(() => Boolean(props.focused || props.filled))
+const errorMessage = computed(() => resolvedHelper.value || '字段内容有误')
+const showErrorIndicator = computed(() =>
+  resolvedError.value && resolvedErrorDisplay.value === 'icon',
+)
+const showHelper = computed(() =>
+  Boolean(resolvedHelper.value) && !(resolvedError.value && resolvedErrorDisplay.value === 'icon'),
+)
+const floatingM3ErrorHelper = computed(() =>
+  resolvedMode.value === 'm3'
+  && resolvedError.value
+  && resolvedErrorDisplay.value === 'message'
+  && Boolean(resolvedHelper.value),
+)
 
 const resolvedSize = computed(() =>
   resolveSjfSizeRecipe(effectiveSize.value, SJF_LABEL_SIZE_RECIPE),
@@ -252,6 +314,9 @@ const rootClasses = computed(() => ({
   'is-form-grid': Boolean(form),
   'is-split-grid': isSplitGrid.value,
   'is-form-box-group': Boolean(form?.boxGroup.value && resolvedMode.value === 'horizontal-box'),
+  'is-error-display-message': resolvedErrorDisplay.value === 'message',
+  'is-error-display-icon': resolvedErrorDisplay.value === 'icon',
+  'has-floating-error-helper': floatingM3ErrorHelper.value,
 }))
 
 function normalizeSpan(value: number): number {
@@ -325,6 +390,11 @@ function alignToJustify(value: SjfHorizontalAlign): string {
   gap: var(--sjf-label-gap);
 }
 
+.sjf-label.is-m3 .sjf-label__stack {
+  position: relative;
+  overflow: visible;
+}
+
 .sjf-label__horizontal {
   display: grid;
   grid-template-columns: minmax(0, var(--sjf-label-width)) minmax(0, 1fr);
@@ -332,17 +402,24 @@ function alignToJustify(value: SjfHorizontalAlign): string {
   gap: var(--sjf-label-gap);
 }
 
-.sjf-label__label-cell {
+.sjf-label__label-cell,
+.sjf-label__label-line {
   min-height: var(--sjf-label-control-height);
   display: flex;
   align-items: center;
   justify-content: var(--sjf-label-label-justify);
+  gap: var(--sjf-label-required-gap);
   text-align: var(--sjf-label-label-align);
+}
+
+.sjf-label__label-line {
+  min-height: auto;
 }
 
 .sjf-label__body,
 .sjf-label__box-content,
 .sjf-label__m3-content {
+  position: relative;
   text-align: var(--sjf-label-content-align);
 }
 
@@ -408,8 +485,32 @@ function alignToJustify(value: SjfHorizontalAlign): string {
   color: var(--sjf-label-error-color);
 }
 
+.sjf-label__m3-error-indicator,
+.sjf-label__content-error-indicator {
+  position: absolute;
+  inset-inline-end: var(--sjf-label-padding-x);
+  top: 50%;
+  z-index: 5;
+  display: inline-flex;
+  transform: translateY(-50%);
+}
+
+.sjf-label__content-error-indicator {
+  inset-inline-end: 0;
+}
+
 .sjf-label__helper-offset {
   padding-inline: var(--sjf-label-padding-x);
+}
+
+.sjf-label__helper-offset.is-m3-error-floating {
+  position: absolute;
+  inset-inline: 0;
+  top: calc(100% + var(--sjf-label-required-gap));
+  z-index: 8;
+  box-sizing: border-box;
+  margin: 0;
+  pointer-events: none;
 }
 
 .sjf-label__box {
@@ -419,6 +520,10 @@ function alignToJustify(value: SjfHorizontalAlign): string {
   border-radius: var(--sjf-label-radius);
   background: var(--sjf-label-surface);
   transition: border-color 150ms ease;
+}
+
+.sjf-label.is-error-display-icon .sjf-label__box {
+  overflow: visible;
 }
 
 .sjf-label__box--horizontal {
@@ -434,6 +539,7 @@ function alignToJustify(value: SjfHorizontalAlign): string {
   display: flex;
   align-items: center;
   justify-content: var(--sjf-label-label-justify);
+  gap: var(--sjf-label-required-gap);
   box-sizing: border-box;
   padding-inline: var(--sjf-label-padding-x);
   padding-block: var(--sjf-label-padding-y);
@@ -463,6 +569,23 @@ function alignToJustify(value: SjfHorizontalAlign): string {
 
 .sjf-label.is-form-box-group .sjf-label__box-content {
   background: var(--sjf-label-surface);
+}
+
+.sjf-label.is-error.is-form-box-group .sjf-label__box-label {
+  color: var(--sjf-label-error-color);
+  background: color-mix(
+    in srgb,
+    var(--sjf-label-error-color) 8%,
+    var(--sjf-label-box-label-surface)
+  );
+}
+
+.sjf-label.is-error.is-form-box-group .sjf-label__box-content {
+  background: color-mix(
+    in srgb,
+    var(--sjf-label-error-color) 4%,
+    var(--sjf-label-surface)
+  );
 }
 
 .sjf-label.is-focused .sjf-label__box {
