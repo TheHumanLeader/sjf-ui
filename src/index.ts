@@ -1,4 +1,4 @@
-import './styles/base.css'
+import './styles/index.css'
 
 export { default as SjfLabel } from './components/Label/index.vue'
 export * from './components/Label'

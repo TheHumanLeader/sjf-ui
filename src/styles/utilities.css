@@ -1,0 +1,150 @@
+@layer sjf-utilities {
+  /* ---------- M3 color utilities ---------- */
+  :where(.text-primary, .sjf-text-primary) { color: var(--md-sys-color-primary); }
+  :where(.text-secondary, .sjf-text-secondary) { color: var(--md-sys-color-secondary); }
+  :where(.text-tertiary, .sjf-text-tertiary) { color: var(--md-sys-color-tertiary); }
+  :where(.text-error, .sjf-text-error) { color: var(--md-sys-color-error); }
+  :where(.text-surface, .sjf-text-surface) { color: var(--md-sys-color-on-surface); }
+  :where(.text-muted, .sjf-text-muted) { color: var(--md-sys-color-on-surface-variant); }
+  :where(.text-outline, .sjf-text-outline) { color: var(--md-sys-color-outline); }
+
+  :where(.bg-primary, .sjf-bg-primary) { background: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); }
+  :where(.bg-primary-container, .sjf-bg-primary-container) { background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); }
+  :where(.bg-secondary, .sjf-bg-secondary) { background: var(--md-sys-color-secondary); color: var(--md-sys-color-on-secondary); }
+  :where(.bg-secondary-container, .sjf-bg-secondary-container) { background: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-secondary-container); }
+  :where(.bg-tertiary, .sjf-bg-tertiary) { background: var(--md-sys-color-tertiary); color: var(--md-sys-color-on-tertiary); }
+  :where(.bg-tertiary-container, .sjf-bg-tertiary-container) { background: var(--md-sys-color-tertiary-container); color: var(--md-sys-color-on-tertiary-container); }
+  :where(.bg-error, .sjf-bg-error) { background: var(--md-sys-color-error); color: var(--md-sys-color-on-error); }
+  :where(.bg-error-container, .sjf-bg-error-container) { background: var(--md-sys-color-error-container); color: var(--md-sys-color-on-error-container); }
+  :where(.bg-surface, .sjf-bg-surface) { background: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface); }
+  :where(.bg-surface-low, .sjf-bg-surface-low) { background: var(--md-sys-color-surface-container-low); color: var(--md-sys-color-on-surface); }
+  :where(.bg-surface-container, .sjf-bg-surface-container) { background: var(--md-sys-color-surface-container); color: var(--md-sys-color-on-surface); }
+  :where(.bg-surface-high, .sjf-bg-surface-high) { background: var(--md-sys-color-surface-container-high); color: var(--md-sys-color-on-surface); }
+
+  /* Pure black/white automatic foreground utilities. */
+  :where(.bg-primary-auto, .sjf-bg-primary-auto) { background: var(--md-sys-color-primary); color: var(--sjf-auto-on-primary); }
+  :where(.bg-primary-container-auto, .sjf-bg-primary-container-auto) { background: var(--md-sys-color-primary-container); color: var(--sjf-auto-on-primary-container); }
+  :where(.bg-secondary-auto, .sjf-bg-secondary-auto) { background: var(--md-sys-color-secondary); color: var(--sjf-auto-on-secondary); }
+  :where(.bg-secondary-container-auto, .sjf-bg-secondary-container-auto) { background: var(--md-sys-color-secondary-container); color: var(--sjf-auto-on-secondary-container); }
+  :where(.bg-tertiary-auto, .sjf-bg-tertiary-auto) { background: var(--md-sys-color-tertiary); color: var(--sjf-auto-on-tertiary); }
+  :where(.bg-tertiary-container-auto, .sjf-bg-tertiary-container-auto) { background: var(--md-sys-color-tertiary-container); color: var(--sjf-auto-on-tertiary-container); }
+  :where(.bg-error-auto, .sjf-bg-error-auto) { background: var(--md-sys-color-error); color: var(--sjf-auto-on-error); }
+  :where(.bg-error-container-auto, .sjf-bg-error-container-auto) { background: var(--md-sys-color-error-container); color: var(--sjf-auto-on-error-container); }
+
+  /* ---------- Ordered spacing utilities ---------- */
+  :where(.pd-mn, .sjf-pd-mn) { padding: var(--sjf-pd-mn); }
+  :where(.pd-sm, .sjf-pd-sm) { padding: var(--sjf-pd-sm); }
+  :where(.pd-nm, .sjf-pd-nm) { padding: var(--sjf-pd-nm); }
+  :where(.pd-md, .sjf-pd-md) { padding: var(--sjf-pd-md); }
+  :where(.pd-lg, .sjf-pd-lg) { padding: var(--sjf-pd-lg); }
+
+  :where(.pdx-mn, .sjf-pdx-mn) { padding-inline: var(--sjf-pd-mn); }
+  :where(.pdx-sm, .sjf-pdx-sm) { padding-inline: var(--sjf-pd-sm); }
+  :where(.pdx-nm, .sjf-pdx-nm) { padding-inline: var(--sjf-pd-nm); }
+  :where(.pdx-md, .sjf-pdx-md) { padding-inline: var(--sjf-pd-md); }
+  :where(.pdx-lg, .sjf-pdx-lg) { padding-inline: var(--sjf-pd-lg); }
+
+  :where(.pdy-mn, .sjf-pdy-mn) { padding-block: var(--sjf-pd-mn); }
+  :where(.pdy-sm, .sjf-pdy-sm) { padding-block: var(--sjf-pd-sm); }
+  :where(.pdy-nm, .sjf-pdy-nm) { padding-block: var(--sjf-pd-nm); }
+  :where(.pdy-md, .sjf-pdy-md) { padding-block: var(--sjf-pd-md); }
+  :where(.pdy-lg, .sjf-pdy-lg) { padding-block: var(--sjf-pd-lg); }
+
+  :where(.mg-mn, .sjf-mg-mn) { margin: var(--sjf-mg-mn); }
+  :where(.mg-sm, .sjf-mg-sm) { margin: var(--sjf-mg-sm); }
+  :where(.mg-nm, .sjf-mg-nm) { margin: var(--sjf-mg-nm); }
+  :where(.mg-md, .sjf-mg-md) { margin: var(--sjf-mg-md); }
+  :where(.mg-lg, .sjf-mg-lg) { margin: var(--sjf-mg-lg); }
+
+  :where(.mgx-mn, .sjf-mgx-mn) { margin-inline: var(--sjf-mg-mn); }
+  :where(.mgx-sm, .sjf-mgx-sm) { margin-inline: var(--sjf-mg-sm); }
+  :where(.mgx-nm, .sjf-mgx-nm) { margin-inline: var(--sjf-mg-nm); }
+  :where(.mgx-md, .sjf-mgx-md) { margin-inline: var(--sjf-mg-md); }
+  :where(.mgx-lg, .sjf-mgx-lg) { margin-inline: var(--sjf-mg-lg); }
+
+  :where(.mgy-mn, .sjf-mgy-mn) { margin-block: var(--sjf-mg-mn); }
+  :where(.mgy-sm, .sjf-mgy-sm) { margin-block: var(--sjf-mg-sm); }
+  :where(.mgy-nm, .sjf-mgy-nm) { margin-block: var(--sjf-mg-nm); }
+  :where(.mgy-md, .sjf-mgy-md) { margin-block: var(--sjf-mg-md); }
+  :where(.mgy-lg, .sjf-mgy-lg) { margin-block: var(--sjf-mg-lg); }
+
+  :where(.gap-mn, .sjf-gap-mn) { gap: var(--sjf-gap-mn); }
+  :where(.gap-sm, .sjf-gap-sm) { gap: var(--sjf-gap-sm); }
+  :where(.gap-nm, .sjf-gap-nm) { gap: var(--sjf-gap-nm); }
+  :where(.gap-md, .sjf-gap-md) { gap: var(--sjf-gap-md); }
+  :where(.gap-lg, .sjf-gap-lg) { gap: var(--sjf-gap-lg); }
+
+  :where(.gapx-mn, .sjf-gapx-mn) { column-gap: var(--sjf-gap-mn); }
+  :where(.gapx-sm, .sjf-gapx-sm) { column-gap: var(--sjf-gap-sm); }
+  :where(.gapx-nm, .sjf-gapx-nm) { column-gap: var(--sjf-gap-nm); }
+  :where(.gapx-md, .sjf-gapx-md) { column-gap: var(--sjf-gap-md); }
+  :where(.gapx-lg, .sjf-gapx-lg) { column-gap: var(--sjf-gap-lg); }
+
+  :where(.gapy-mn, .sjf-gapy-mn) { row-gap: var(--sjf-gap-mn); }
+  :where(.gapy-sm, .sjf-gapy-sm) { row-gap: var(--sjf-gap-sm); }
+  :where(.gapy-nm, .sjf-gapy-nm) { row-gap: var(--sjf-gap-nm); }
+  :where(.gapy-md, .sjf-gapy-md) { row-gap: var(--sjf-gap-md); }
+  :where(.gapy-lg, .sjf-gapy-lg) { row-gap: var(--sjf-gap-lg); }
+
+  :where(.rd-mn, .sjf-rd-mn) { border-radius: var(--sjf-rd-mn); }
+  :where(.rd-sm, .sjf-rd-sm) { border-radius: var(--sjf-rd-sm); }
+  :where(.rd-nm, .sjf-rd-nm) { border-radius: var(--sjf-rd-nm); }
+  :where(.rd-md, .sjf-rd-md) { border-radius: var(--sjf-rd-md); }
+  :where(.rd-lg, .sjf-rd-lg) { border-radius: var(--sjf-rd-lg); }
+
+  :where(.shadow-mn, .sjf-shadow-mn) { box-shadow: var(--sjf-shadow-mn); }
+  :where(.shadow-sm, .sjf-shadow-sm) { box-shadow: var(--sjf-shadow-sm); }
+  :where(.shadow-nm, .sjf-shadow-nm) { box-shadow: var(--sjf-shadow-nm); }
+  :where(.shadow-md, .sjf-shadow-md) { box-shadow: var(--sjf-shadow-md); }
+  :where(.shadow-lg, .sjf-shadow-lg) { box-shadow: var(--sjf-shadow-lg); }
+
+  :where(.control-h-mn, .sjf-control-h-mn) { min-height: var(--sjf-control-h-mn); }
+  :where(.control-h-sm, .sjf-control-h-sm) { min-height: var(--sjf-control-h-sm); }
+  :where(.control-h-nm, .sjf-control-h-nm) { min-height: var(--sjf-control-h-nm); }
+  :where(.control-h-md, .sjf-control-h-md) { min-height: var(--sjf-control-h-md); }
+  :where(.control-h-lg, .sjf-control-h-lg) { min-height: var(--sjf-control-h-lg); }
+
+  /* ---------- Layout utilities ---------- */
+  :where(.row, .sjf-row) { display: flex; flex-direction: row; }
+  :where(.column, .sjf-column) { display: flex; flex-direction: column; }
+  :where(.inline-row, .sjf-inline-row) { display: inline-flex; flex-direction: row; }
+  :where(.inline-column, .sjf-inline-column) { display: inline-flex; flex-direction: column; }
+  :where(.grid, .sjf-grid) { display: grid; }
+
+  :where(.wrap, .sjf-wrap) { flex-wrap: wrap; }
+  :where(.nowrap, .sjf-nowrap) { flex-wrap: nowrap; }
+
+  :where(.items-start, .sjf-items-start) { align-items: flex-start; }
+  :where(.items-center, .sjf-items-center) { align-items: center; }
+  :where(.items-end, .sjf-items-end) { align-items: flex-end; }
+  :where(.items-stretch, .sjf-items-stretch) { align-items: stretch; }
+  :where(.items-baseline, .sjf-items-baseline) { align-items: baseline; }
+
+  :where(.justify-start, .sjf-justify-start) { justify-content: flex-start; }
+  :where(.justify-center, .sjf-justify-center) { justify-content: center; }
+  :where(.justify-end, .sjf-justify-end) { justify-content: flex-end; }
+  :where(.justify-between, .sjf-justify-between) { justify-content: space-between; }
+  :where(.justify-around, .sjf-justify-around) { justify-content: space-around; }
+  :where(.justify-evenly, .sjf-justify-evenly) { justify-content: space-evenly; }
+
+  :where(.self-start, .sjf-self-start) { align-self: flex-start; }
+  :where(.self-center, .sjf-self-center) { align-self: center; }
+  :where(.self-end, .sjf-self-end) { align-self: flex-end; }
+  :where(.self-stretch, .sjf-self-stretch) { align-self: stretch; }
+
+  :where(.grow, .sjf-grow) { flex-grow: 1; }
+  :where(.grow-0, .sjf-grow-0) { flex-grow: 0; }
+  :where(.shrink, .sjf-shrink) { flex-shrink: 1; }
+  :where(.shrink-0, .sjf-shrink-0) { flex-shrink: 0; }
+
+  :where(.center, .sjf-center) { display: flex; align-items: center; justify-content: center; }
+  :where(.full-width, .sjf-full-width) { width: 100%; }
+  :where(.full-height, .sjf-full-height) { height: 100%; }
+  :where(.min-width-0, .sjf-min-width-0) { min-width: 0; }
+  :where(.min-height-0, .sjf-min-height-0) { min-height: 0; }
+
+  :where(.grid-2, .sjf-grid-2) { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  :where(.grid-3, .sjf-grid-3) { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  :where(.grid-4, .sjf-grid-4) { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  :where(.grid-auto, .sjf-grid-auto) { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); }
+}
