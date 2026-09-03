@@ -12,6 +12,10 @@
     :focused="focused"
     :filled="filled"
   >
+    <template v-if="slots.label" #label>
+      <slot name="label" />
+    </template>
+
     <input
       class="sjf-input__native"
       :class="{ 'is-embedded': embedded }"
@@ -37,6 +41,9 @@ import { useSjfFormContext } from '../Form/context'
 import type { SjfInputProps, SjfInputModelValue } from './index'
 
 const props = defineProps<SjfInputProps>()
+const slots = defineSlots<{
+  label?: () => unknown
+}>()
 
 const emit = defineEmits<{
   'update:modelValue': [value: string]
