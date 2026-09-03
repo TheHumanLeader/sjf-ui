@@ -204,7 +204,11 @@ const rootClasses = computed(() => ({
   --sjf-label-focus-color: var(--md-sys-color-primary, #4f64d9);
   --sjf-label-error-color: var(--md-sys-color-error, #ba1a1a);
   --sjf-label-surface: var(--md-sys-color-surface, #fff);
-  --sjf-label-box-label-surface: var(--md-sys-color-surface-container-high, #eceef6);
+  --sjf-label-box-label-surface: color-mix(
+    in srgb,
+    var(--md-sys-color-surface-container, #f3edf7) 52%,
+    var(--md-sys-color-surface, #fff)
+  );
   --sjf-control-embedded: 0;
 
   color: var(--sjf-label-color);
@@ -270,15 +274,23 @@ const rootClasses = computed(() => ({
   top: 50%;
   transform: translateY(-50%);
   max-width: calc(100% - (var(--sjf-label-padding-x) * 2));
-  padding-inline: var(--sjf-label-caption-padding-x);
-  background: var(--sjf-label-surface);
+  padding-inline: 0;
+  background: transparent;
   pointer-events: none;
-  transition: top 150ms ease, transform 150ms ease, color 150ms ease, font-size 150ms ease;
+  transition:
+    top 150ms ease,
+    transform 150ms ease,
+    color 150ms ease,
+    font-size 150ms ease,
+    padding-inline 150ms ease,
+    background-color 150ms ease;
 }
 
 .sjf-label__m3-caption.is-shrunk {
   top: 0;
   transform: translateY(-50%);
+  padding-inline: var(--sjf-label-caption-padding-x);
+  background: var(--sjf-label-surface);
 }
 
 .sjf-label.is-focused .sjf-label__m3-caption {
