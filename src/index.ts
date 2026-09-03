@@ -9,5 +9,6 @@ export * from './components/Input'
 export { default as SjfLabel } from './components/Label/index.vue'
 export * from './components/Label'
 
+export * from './core/motion'
 export * from './core/size'
 export * from './core/theme'

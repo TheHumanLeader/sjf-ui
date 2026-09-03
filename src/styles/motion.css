@@ -1,0 +1,64 @@
+@layer sjf-motion {
+  :root {
+    --sjf-motion-instant: 80ms;
+    --sjf-motion-fast: 120ms;
+    --sjf-motion-normal: 180ms;
+    --sjf-motion-slow: 260ms;
+    --sjf-motion-enter: 220ms;
+    --sjf-motion-leave: 160ms;
+
+    --sjf-motion-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+    --sjf-motion-ease-enter: cubic-bezier(0, 0, 0, 1);
+    --sjf-motion-ease-leave: cubic-bezier(0.4, 0, 1, 1);
+
+    --sjf-motion-duration: var(--sjf-motion-normal);
+    --sjf-motion-ease: var(--sjf-motion-ease-standard);
+  }
+
+  /*
+   * Every SJF-owned element gets a safe state transition by default.
+   * We deliberately do not animate layout dimensions here and never use
+   * transition: all. A component may explicitly add a bounded layout-like
+   * transition when the interaction requires it (for example M3 floating label).
+   */
+  :where([class^='sjf-'], [class*=' sjf-']) {
+    transition-property:
+      color,
+      background-color,
+      border-color,
+      box-shadow,
+      opacity,
+      transform;
+    transition-duration: var(--sjf-motion-duration);
+    transition-timing-function: var(--sjf-motion-ease);
+  }
+
+  :where(.sjf-motion-instant) { --sjf-motion-duration: var(--sjf-motion-instant); }
+  :where(.sjf-motion-fast) { --sjf-motion-duration: var(--sjf-motion-fast); }
+  :where(.sjf-motion-normal) { --sjf-motion-duration: var(--sjf-motion-normal); }
+  :where(.sjf-motion-slow) { --sjf-motion-duration: var(--sjf-motion-slow); }
+  :where(.sjf-motion-enter) {
+    --sjf-motion-duration: var(--sjf-motion-enter);
+    --sjf-motion-ease: var(--sjf-motion-ease-enter);
+  }
+  :where(.sjf-motion-leave) {
+    --sjf-motion-duration: var(--sjf-motion-leave);
+    --sjf-motion-ease: var(--sjf-motion-ease-leave);
+  }
+
+  :where(.sjf-motion-none) {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :where([class^='sjf-'], [class*=' sjf-']) {
+      scroll-behavior: auto !important;
+      transition-duration: 1ms !important;
+      transition-delay: 0ms !important;
+      animation-duration: 1ms !important;
+      animation-delay: 0ms !important;
+      animation-iteration-count: 1 !important;
+    }
+  }
+}

@@ -3,7 +3,7 @@
     <p class="page-kicker">FOUNDATIONS</p>
     <h1 class="page-title">设计基础</h1>
     <p class="page-subtitle">
-      SJF-UI 默认提供 Material 3 颜色、自动前景色、Ordered Size 间距与通用布局。组件只描述语义和相对关系，不重复发明基础样式。
+      SJF-UI 默认提供 Material 3 颜色、自动前景色、Ordered Size、通用布局与 Motion。组件只描述语义和相对关系，不重复发明基础样式。
     </p>
 
     <section class="section">
@@ -124,6 +124,37 @@
 
     <section class="section">
       <div class="section-head">
+        <h2>Motion Foundation</h2>
+        <p>所有 SJF 自有元素默认具有克制的状态动画，但绝不使用 transition: all。</p>
+      </div>
+
+      <article class="spec-card">
+        <div class="row wrap gap-sm">
+          <code class="inline-code">instant · 80ms</code>
+          <code class="inline-code">fast · 120ms</code>
+          <code class="inline-code">normal · 180ms</code>
+          <code class="inline-code">slow · 260ms</code>
+          <code class="inline-code">enter · 220ms</code>
+          <code class="inline-code">leave · 160ms</code>
+        </div>
+
+        <button class="secondary-action motion-trigger" type="button" @click="motionDemoActive = !motionDemoActive">
+          切换动画状态
+        </button>
+
+        <div class="motion-demo-track">
+          <div class="sjf-motion-demo" :class="{ active: motionDemoActive }">SJF Motion</div>
+        </div>
+
+        <div class="callout">
+          默认只动画 <span class="inline-code">color / background / border / shadow / opacity / transform</span>。
+          尺寸和布局属性只允许组件在明确、局部的交互里按需使用。系统开启“减少动态效果”后自动降到近乎即时。
+        </div>
+      </article>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
         <h2>Form without FormItem</h2>
         <p>不要求用户多套一层 FormItem。</p>
       </div>
@@ -138,7 +169,11 @@
   </div>
 </template>
 
-<script setup vapor lang="ts"></script>
+<script setup vapor lang="ts">
+import { ref } from 'vue'
+
+const motionDemoActive = ref(false)
+</script>
 
 <style scoped>
 .foundation-swatch {
@@ -153,5 +188,43 @@
   color: var(--md-sys-color-on-surface);
   font-size: 12px;
   font-weight: 700;
+}
+
+.motion-trigger {
+  margin-top: 16px;
+  cursor: pointer;
+}
+
+.motion-demo-track {
+  margin-top: 14px;
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  border: 1px solid var(--docs-border);
+  border-radius: var(--sjf-rd-nm);
+  padding: var(--sjf-pd-sm);
+  background: var(--md-sys-color-surface-container-low);
+}
+
+.sjf-motion-demo {
+  width: 112px;
+  min-height: 42px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--sjf-rd-sm);
+  background: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.sjf-motion-demo.active {
+  transform: translateX(128px) scale(1.04);
+  border-color: var(--md-sys-color-primary);
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  box-shadow: var(--sjf-shadow-sm);
 }
 </style>

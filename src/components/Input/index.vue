@@ -100,7 +100,6 @@ function onInput(event: Event): void {
   color: var(--md-sys-color-on-surface, #1d1b20);
   font: inherit;
   text-align: var(--sjf-label-content-align, left);
-  transition: border-color 150ms ease, box-shadow 150ms ease;
 }
 
 .sjf-input__native:focus {
