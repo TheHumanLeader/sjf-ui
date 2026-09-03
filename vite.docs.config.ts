@@ -2,9 +2,9 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   root: 'docs',
-  base: '/sjf-ui/',
+  base: command === 'serve' ? '/' : '/sjf-ui/',
   plugins: [
     vue({
       features: {
@@ -23,4 +23,4 @@ export default defineConfig({
     outDir: '../dist-docs',
     emptyOutDir: true,
   },
-})
+}))
