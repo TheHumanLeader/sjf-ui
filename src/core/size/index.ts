@@ -35,60 +35,42 @@ export interface RegisterSizeOptions {
 
 const DEFAULT_DOMAINS: Record<SjfBuiltinSize, SjfSizeDomains> = {
   mn: {
-    padding: '4px',
-    margin: '4px',
-    gap: '4px',
-    radius: '4px',
-    shadow: '0 1px 2px rgb(0 0 0 / 0.10)',
-    controlHeight: '28px',
-    fontSize: '11px',
-    labelWidth: '72px',
-    lineWidth: '1px',
+    padding: '4px', margin: '4px', gap: '4px', radius: '4px',
+    shadow: '0 1px 2px rgb(0 0 0 / 0.10)', controlHeight: '28px',
+    fontSize: '11px', labelWidth: '72px', lineWidth: '1px',
   },
   sm: {
-    padding: '8px',
-    margin: '8px',
-    gap: '8px',
-    radius: '6px',
-    shadow: '0 1px 3px rgb(0 0 0 / 0.12)',
-    controlHeight: '32px',
-    fontSize: '12px',
-    labelWidth: '84px',
-    lineWidth: '1px',
+    padding: '8px', margin: '8px', gap: '8px', radius: '6px',
+    shadow: '0 1px 3px rgb(0 0 0 / 0.12)', controlHeight: '32px',
+    fontSize: '12px', labelWidth: '84px', lineWidth: '1px',
   },
   nm: {
-    padding: '12px',
-    margin: '12px',
-    gap: '12px',
-    radius: '8px',
-    shadow: '0 2px 6px rgb(0 0 0 / 0.12)',
-    controlHeight: '40px',
-    fontSize: '14px',
-    labelWidth: '96px',
-    lineWidth: '1px',
+    padding: '12px', margin: '12px', gap: '12px', radius: '8px',
+    shadow: '0 2px 6px rgb(0 0 0 / 0.12)', controlHeight: '40px',
+    fontSize: '14px', labelWidth: '96px', lineWidth: '1px',
   },
   md: {
-    padding: '16px',
-    margin: '16px',
-    gap: '16px',
-    radius: '12px',
-    shadow: '0 3px 10px rgb(0 0 0 / 0.14)',
-    controlHeight: '48px',
-    fontSize: '15px',
-    labelWidth: '112px',
-    lineWidth: '2px',
+    padding: '16px', margin: '16px', gap: '16px', radius: '12px',
+    shadow: '0 3px 10px rgb(0 0 0 / 0.14)', controlHeight: '48px',
+    fontSize: '15px', labelWidth: '112px', lineWidth: '2px',
   },
   lg: {
-    padding: '24px',
-    margin: '24px',
-    gap: '24px',
-    radius: '16px',
-    shadow: '0 6px 18px rgb(0 0 0 / 0.16)',
-    controlHeight: '56px',
-    fontSize: '16px',
-    labelWidth: '132px',
-    lineWidth: '2px',
+    padding: '24px', margin: '24px', gap: '24px', radius: '16px',
+    shadow: '0 6px 18px rgb(0 0 0 / 0.16)', controlHeight: '56px',
+    fontSize: '16px', labelWidth: '132px', lineWidth: '2px',
   },
+}
+
+const CSS_DOMAIN_NAMES: Record<SjfSizeDomain, string> = {
+  padding: 'pd',
+  margin: 'mg',
+  gap: 'gap',
+  radius: 'rd',
+  shadow: 'shadow',
+  controlHeight: 'control-h',
+  fontSize: 'font',
+  labelWidth: 'label-w',
+  lineWidth: 'line',
 }
 
 const order = shallowRef<SjfSize[]>([...SJF_BUILTIN_SIZE_ORDER])
@@ -108,9 +90,14 @@ export function useSjfBaseSize(): ShallowRef<SjfSize> {
 export function setSjfBaseSize(size: SjfSize): void {
   assertRegisteredSize(size)
   baseSize.value = size
+  if (typeof document !== 'undefined') {
+    document.documentElement.dataset.sjfSize = size
+  }
 }
 
 export function registerSjfSize(name: SjfSize, options: RegisterSizeOptions): void {
+  assertSafeSizeName(name)
+
   if (domains.has(name)) {
     throw new Error(`[SJF-UI] size "${name}" is already registered.`)
   }
@@ -135,6 +122,8 @@ export function registerSjfSize(name: SjfSize, options: RegisterSizeOptions): vo
 
   domains.set(name, { ...options.domains })
   order.value = nextOrder
+  syncSizeToDom(name)
+  installRuntimeUtilityRules(name)
 }
 
 export function compareSjfSize(a: SjfSize, b: SjfSize): number {
@@ -185,6 +174,60 @@ export function resolveSjfSizeRecipe(
   )
 }
 
+export function applySjfSizeCssVars(root: HTMLElement = document.documentElement): void {
+  for (const size of order.value) {
+    const values = domains.get(size)
+    if (!values) continue
+
+    for (const [domain, value] of Object.entries(values) as [SjfSizeDomain, string][]) {
+      root.style.setProperty(`--sjf-${CSS_DOMAIN_NAMES[domain]}-${size}`, value)
+    }
+  }
+
+  root.dataset.sjfSize = baseSize.value
+}
+
+function syncSizeToDom(size: SjfSize): void {
+  if (typeof document === 'undefined') return
+  const values = domains.get(size)
+  if (!values) return
+
+  for (const [domain, value] of Object.entries(values) as [SjfSizeDomain, string][]) {
+    document.documentElement.style.setProperty(`--sjf-${CSS_DOMAIN_NAMES[domain]}-${size}`, value)
+  }
+}
+
+function installRuntimeUtilityRules(size: SjfSize): void {
+  if (typeof document === 'undefined' || SJF_BUILTIN_SIZE_ORDER.includes(size as SjfBuiltinSize)) return
+
+  const id = 'sjf-runtime-size-utilities'
+  let style = document.getElementById(id) as HTMLStyleElement | null
+  if (!style) {
+    style = document.createElement('style')
+    style.id = id
+    document.head.appendChild(style)
+  }
+
+  style.textContent += `\n${buildUtilityRules(size)}`
+}
+
+function buildUtilityRules(size: SjfSize): string {
+  return `
+.pd-${size},.sjf-pd-${size}{padding:var(--sjf-pd-${size})}
+.pdx-${size},.sjf-pdx-${size}{padding-inline:var(--sjf-pd-${size})}
+.pdy-${size},.sjf-pdy-${size}{padding-block:var(--sjf-pd-${size})}
+.mg-${size},.sjf-mg-${size}{margin:var(--sjf-mg-${size})}
+.mgx-${size},.sjf-mgx-${size}{margin-inline:var(--sjf-mg-${size})}
+.mgy-${size},.sjf-mgy-${size}{margin-block:var(--sjf-mg-${size})}
+.gap-${size},.sjf-gap-${size}{gap:var(--sjf-gap-${size})}
+.gapx-${size},.sjf-gapx-${size}{column-gap:var(--sjf-gap-${size})}
+.gapy-${size},.sjf-gapy-${size}{row-gap:var(--sjf-gap-${size})}
+.rd-${size},.sjf-rd-${size}{border-radius:var(--sjf-rd-${size})}
+.shadow-${size},.sjf-shadow-${size}{box-shadow:var(--sjf-shadow-${size})}
+.control-h-${size},.sjf-control-h-${size}{min-height:var(--sjf-control-h-${size})}
+`
+}
+
 function getSizeIndex(size: SjfSize): number {
   const index = order.value.indexOf(size)
   if (index < 0) {
@@ -195,6 +238,12 @@ function getSizeIndex(size: SjfSize): number {
 
 function assertRegisteredSize(size: SjfSize): void {
   getSizeIndex(size)
+}
+
+function assertSafeSizeName(size: SjfSize): void {
+  if (!/^[A-Za-z][A-Za-z0-9_-]*$/.test(size)) {
+    throw new Error(`[SJF-UI] size name "${size}" is not safe for CSS utilities.`)
+  }
 }
 
 function throwUnknownAnchor(size: SjfSize): never {
