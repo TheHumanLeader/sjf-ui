@@ -10,16 +10,40 @@ export const SJF_LABEL_MODES = [
 
 export type SjfLabelMode = (typeof SJF_LABEL_MODES)[number]
 
-export interface SjfLabelProps {
-  label?: string
+/**
+ * Label defaults/options that can be provided by SjfForm or by an input-like component.
+ * colSpan / rowSpan describe the Label cell itself when the mode participates in Form Grid.
+ */
+export interface SjfLabelOption {
   mode?: SjfLabelMode
   size?: SjfSize
   required?: boolean
   disabled?: boolean
   error?: boolean
+  helper?: string
+  colSpan?: number
+  rowSpan?: number
+}
+
+export interface SjfLabelProps {
+  label?: string
+  labelOption?: SjfLabelOption
+
+  /** Control/content cell span in SjfForm Grid. */
+  colSpan?: number
+  rowSpan?: number
+
+  /** Direct props override labelOption, which overrides SjfForm labelOption. */
+  mode?: SjfLabelMode
+  size?: SjfSize
+  required?: boolean
+  disabled?: boolean
+  error?: boolean
+  helper?: string
+
+  /** Runtime state normally supplied by the hosting input-like component. */
   focused?: boolean
   filled?: boolean
-  helper?: string
 }
 
 export const SJF_LABEL_SIZE_RECIPE = {
