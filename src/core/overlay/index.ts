@@ -135,7 +135,7 @@ export function createSjfPointAnchor(
 }
 
 export function getSjfOverlayAnchorRect(anchor: SjfOverlayAnchor): SjfOverlayRect {
-  if (anchor instanceof HTMLElement) {
+  if (isHTMLElement(anchor)) {
     return rectFromDomRect(anchor.getBoundingClientRect())
   }
 
@@ -161,7 +161,7 @@ export function computeSjfOverlayPosition(
 ): SjfOverlayPositionResult {
   const config = { ...overlayDefaults, ...options }
   const anchorRect = getSjfOverlayAnchorRect(anchor)
-  const panelRect = panel instanceof HTMLElement
+  const panelRect = isHTMLElement(panel)
     ? rectFromDomRect(panel.getBoundingClientRect())
     : panel
 
@@ -187,7 +187,14 @@ export function computeSjfOverlayPosition(
 
   const strategy = resolveStrategy(config.strategy, mount)
   const mountCoords = convertViewportToMountCoords(coords.x, coords.y, strategy, mount)
-  const available = getAvailableSize(anchorRect, placement, coords, viewport, config.viewportPadding)
+  const available = getAvailableSize(
+    anchorRect,
+    placement,
+    coords,
+    viewport,
+    config.viewportPadding,
+    config.offset,
+  )
 
   return {
     x: mountCoords.x,
@@ -259,7 +266,7 @@ export function autoUpdateSjfOverlay(
   const syncObservedElements = (): void => {
     if (!resizeObserver) return
     const anchor = resolveAnchor()
-    const anchorElement = anchor instanceof HTMLElement ? anchor : null
+    const anchorElement = anchor && isHTMLElement(anchor) ? anchor : null
     const panelElement = panelSource()
 
     if (anchorElement !== observedAnchor) {
@@ -382,14 +389,15 @@ function getAvailableSize(
   coords: { x: number; y: number },
   viewport: SjfOverlayRect,
   padding: number,
+  offset: number,
 ): { maxWidth: number; maxHeight: number } {
   let maxWidth = viewport.width - padding * 2
   let maxHeight = viewport.height - padding * 2
 
   if (placement.startsWith('bottom')) maxHeight = viewport.bottom - padding - coords.y
-  if (placement.startsWith('top')) maxHeight = anchor.top - padding - overlayDefaults.offset
+  if (placement.startsWith('top')) maxHeight = anchor.top - padding - offset
   if (placement.startsWith('right')) maxWidth = viewport.right - padding - coords.x
-  if (placement.startsWith('left')) maxWidth = anchor.left - padding - overlayDefaults.offset
+  if (placement.startsWith('left')) maxWidth = anchor.left - padding - offset
 
   return {
     maxWidth: Math.max(0, maxWidth),
@@ -461,6 +469,10 @@ function rectFromDomRect(rect: DOMRect | DOMRectReadOnly): SjfOverlayRect {
     width: rect.width,
     height: rect.height,
   }
+}
+
+function isHTMLElement(value: unknown): value is HTMLElement {
+  return typeof HTMLElement !== 'undefined' && value instanceof HTMLElement
 }
 
 function clamp(value: number, min: number, max: number): number {
