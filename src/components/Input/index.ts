@@ -1,4 +1,4 @@
-import type { SjfLabelOption } from '../Label'
+import type { SjfHorizontalAlign, SjfLabelOption } from '../Label'
 
 export type SjfInputModelValue = string | number | null | undefined
 
@@ -8,6 +8,8 @@ export interface SjfInputProps {
   labelOption?: SjfLabelOption
   colSpan?: number
   rowSpan?: number
+  labelAlign?: SjfHorizontalAlign
+  contentAlign?: SjfHorizontalAlign
 
   type?: string
   name?: string

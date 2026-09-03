@@ -4,6 +4,8 @@
     :label-option="props.labelOption"
     :col-span="props.colSpan ?? 1"
     :row-span="props.rowSpan ?? 1"
+    :label-align="props.labelAlign"
+    :content-align="props.contentAlign"
     :required="resolvedRequired"
     :disabled="resolvedDisabled"
     :error="resolvedError"
@@ -90,6 +92,7 @@ function onInput(event: Event): void {
   background: var(--md-sys-color-surface-container-lowest, #fff);
   color: var(--md-sys-color-on-surface, #1d1b20);
   font: inherit;
+  text-align: var(--sjf-label-content-align, left);
   transition: border-color 150ms ease, box-shadow 150ms ease;
 }
 

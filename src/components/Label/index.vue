@@ -142,7 +142,11 @@
 import { computed } from 'vue'
 import { resolveSjfSizeRecipe, useSjfBaseSize } from '../../core/size'
 import { useSjfFormContext } from '../Form/context'
-import { SJF_LABEL_SIZE_RECIPE, type SjfLabelProps } from './index'
+import {
+  SJF_LABEL_SIZE_RECIPE,
+  type SjfHorizontalAlign,
+  type SjfLabelProps,
+} from './index'
 import LabelCaption from './cps/LabelCaption.vue'
 import LabelHelper from './cps/LabelHelper.vue'
 
@@ -175,6 +179,12 @@ const resolvedError = computed(() =>
 )
 const resolvedHelper = computed(() =>
   props.helper ?? ownOption.value.helper ?? formOption.value.helper ?? '',
+)
+const resolvedLabelAlign = computed<SjfHorizontalAlign>(() =>
+  props.labelAlign ?? ownOption.value.align ?? formOption.value.align ?? 'left',
+)
+const resolvedContentAlign = computed<SjfHorizontalAlign>(() =>
+  props.contentAlign ?? form?.contentAlign.value ?? 'left',
 )
 
 const labelColSpan = computed(() => normalizeSpan(ownOption.value.colSpan ?? formOption.value.colSpan ?? 1))
@@ -220,6 +230,9 @@ const rootStyle = computed(() => ({
   '--sjf-label-caption-padding-x': resolvedSize.value.captionPaddingX,
   '--sjf-label-line-width': resolvedSize.value.lineWidth,
   '--sjf-label-focus-line-width': resolvedSize.value.focusLineWidth,
+  '--sjf-label-label-align': resolvedLabelAlign.value,
+  '--sjf-label-label-justify': alignToJustify(resolvedLabelAlign.value),
+  '--sjf-label-content-align': resolvedContentAlign.value,
   '--sjf-label-grid-label-col-span': String(labelColSpan.value),
   '--sjf-label-grid-label-row-span': String(labelRowSpan.value),
   '--sjf-label-grid-control-col-span': String(controlColSpan.value),
@@ -244,6 +257,12 @@ const rootClasses = computed(() => ({
 function normalizeSpan(value: number): number {
   if (!Number.isFinite(value)) return 1
   return Math.max(1, Math.floor(value))
+}
+
+function alignToJustify(value: SjfHorizontalAlign): string {
+  if (value === 'center') return 'center'
+  if (value === 'right') return 'flex-end'
+  return 'flex-start'
 }
 </script>
 
@@ -317,6 +336,14 @@ function normalizeSpan(value: number): number {
   min-height: var(--sjf-label-control-height);
   display: flex;
   align-items: center;
+  justify-content: var(--sjf-label-label-justify);
+  text-align: var(--sjf-label-label-align);
+}
+
+.sjf-label__body,
+.sjf-label__box-content,
+.sjf-label__m3-content {
+  text-align: var(--sjf-label-content-align);
 }
 
 .sjf-label__m3-shell {
@@ -406,9 +433,11 @@ function normalizeSpan(value: number): number {
   min-height: var(--sjf-label-control-height);
   display: flex;
   align-items: center;
+  justify-content: var(--sjf-label-label-justify);
   box-sizing: border-box;
   padding-inline: var(--sjf-label-padding-x);
   padding-block: var(--sjf-label-padding-y);
+  text-align: var(--sjf-label-label-align);
   background: var(--sjf-label-box-label-surface);
   border-inline-end: var(--sjf-label-line-width) solid var(--sjf-label-border-color);
 }
