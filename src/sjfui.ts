@@ -1,0 +1,45 @@
+import type { App, Plugin } from 'vue'
+import { configureSjfUI, setSjfDefaultSize, type SjfUIConfig } from './core/config'
+import { registerSjfSize, type RegisterSizeOptions, type SjfSize } from './core/size'
+import { setSjfTheme, type SjfThemeName } from './core/theme'
+import {
+  getSjfOverlayDefaults,
+  getSjfOverlayMountResolver,
+  resolveSjfOverlayMount,
+  setSjfOverlayDefaults,
+  setSjfOverlayMount,
+  type SjfOverlayDefaults,
+  type SjfOverlayMountResolver,
+} from './core/overlay'
+import { vSjfOverlayAnchor } from './directives/overlayAnchor'
+
+export interface SjfUIApi extends Plugin {
+  configure: (config: SjfUIConfig) => void
+  setDefaultSize: (size: SjfSize) => void
+  registerSize: (name: SjfSize, options: RegisterSizeOptions) => void
+  setTheme: (theme: SjfThemeName) => void
+  setOverlayMount: (resolver: SjfOverlayMountResolver) => void
+  setOverlay: (options: Partial<SjfOverlayDefaults>) => void
+  getOverlayMount: () => HTMLElement | null
+  getOverlayMountResolver: () => SjfOverlayMountResolver
+  getOverlay: () => Readonly<SjfOverlayDefaults>
+}
+
+export const SJFUI: SjfUIApi = {
+  install(app: App, config?: SjfUIConfig) {
+    app.directive('sjf-overlay-anchor', vSjfOverlayAnchor)
+    if (config) configureSjfUI(config)
+  },
+
+  configure: configureSjfUI,
+  setDefaultSize: setSjfDefaultSize,
+  registerSize: registerSjfSize,
+  setTheme: setSjfTheme,
+  setOverlayMount: setSjfOverlayMount,
+  setOverlay: setSjfOverlayDefaults,
+  getOverlayMount: resolveSjfOverlayMount,
+  getOverlayMountResolver: getSjfOverlayMountResolver,
+  getOverlay: getSjfOverlayDefaults,
+}
+
+export default SJFUI
