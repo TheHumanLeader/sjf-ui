@@ -72,6 +72,7 @@
       <HomePage v-if="route === '/'" />
       <FoundationsPage v-else-if="route === '/foundations'" />
       <LabelPage v-else-if="route === '/components/label'" />
+      <FormPage v-else-if="route === '/components/form'" />
       <NotFoundPage v-else />
     </main>
   </div>
@@ -83,6 +84,7 @@ import { readStoredSjfTheme, setSjfTheme, type SjfThemeName } from '@/core/theme
 import HomePage from './pages/HomePage.vue'
 import FoundationsPage from './pages/FoundationsPage.vue'
 import LabelPage from './pages/LabelPage.vue'
+import FormPage from './pages/FormPage.vue'
 import NotFoundPage from './pages/NotFoundPage.vue'
 
 interface NavigationItem {
@@ -107,8 +109,9 @@ const navigation: NavigationGroup[] = [
   {
     title: '表单组件',
     items: [
-      { label: 'Label 标签布局', path: '/components/label', badge: 'NEW' },
-      { label: 'Input 输入框', path: '/components/input', badge: 'NEXT' },
+      { label: 'Form 表单布局', path: '/components/form', badge: 'NEW' },
+      { label: 'Label 标签布局', path: '/components/label' },
+      { label: 'Input 输入框', path: '/components/input', badge: 'WIP' },
       { label: 'Select 选择器', path: '/components/select' },
     ],
   },
