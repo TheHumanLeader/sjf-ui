@@ -34,8 +34,12 @@ const boxMode = computed(() => {
 })
 
 const boxGroup = computed(() => boxMode.value && (props.gap === undefined || props.gap === 0))
+const horizontalBoxGroup = computed(() =>
+  boxGroup.value && (resolvedLabelOption.value.mode ?? 'm3') === 'horizontal-box',
+)
 
 const gapValue = computed(() => {
+  if (horizontalBoxGroup.value) return '0px'
   if (boxGroup.value) {
     return getSjfSizeValue('lineWidth', effectiveSize.value, -1)
   }
@@ -71,7 +75,41 @@ provide(SJF_FORM_CONTEXT_KEY, {
   gap: var(--sjf-form-gap);
 }
 
-.sjf-form.is-box-group {
+/*
+ * horizontal-box uses a true single-line grid instead of a 1px colored gap.
+ * Every cell draws only its right/bottom edge; the form pseudo-element draws
+ * the outer frame. Adjacent cells therefore never stack two borders.
+ */
+.sjf-form.is-box-group[data-label-mode='horizontal-box'] {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--sjf-form-radius);
+  background: var(--md-sys-color-surface, #fff);
+}
+
+.sjf-form.is-box-group[data-label-mode='horizontal-box']::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  border: var(--sjf-form-line-width) solid var(--md-sys-color-outline-variant, #cac4d0);
+  border-radius: inherit;
+}
+
+.sjf-form.is-box-group[data-label-mode='horizontal-box']
+  :deep(.sjf-label.is-form-box-group .sjf-label__box-label),
+.sjf-form.is-box-group[data-label-mode='horizontal-box']
+  :deep(.sjf-label.is-form-box-group .sjf-label__box-content) {
+  border: 0;
+  border-inline-end: var(--sjf-form-line-width) solid var(--md-sys-color-outline-variant, #cac4d0);
+  border-block-end: var(--sjf-form-line-width) solid var(--md-sys-color-outline-variant, #cac4d0);
+  border-radius: 0;
+}
+
+/* Keep the current gap-as-line implementation for vertical-box until its
+ * cells are promoted to the same split-grid model. */
+.sjf-form.is-box-group:not([data-label-mode='horizontal-box']) {
   overflow: hidden;
   border: var(--sjf-form-line-width) solid var(--md-sys-color-outline-variant, #cac4d0);
   border-radius: var(--sjf-form-radius);
