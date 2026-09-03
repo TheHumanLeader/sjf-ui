@@ -1,3 +1,5 @@
+export { default as SjfLabelContent } from './cps/LabelContent.vue'
+
 import type { SjfSize, SjfSizeRecipe } from '../../core/size'
 
 export const SJF_LABEL_MODES = [
