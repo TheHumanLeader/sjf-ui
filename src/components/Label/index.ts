@@ -9,6 +9,7 @@ export const SJF_LABEL_MODES = [
 ] as const
 
 export type SjfLabelMode = (typeof SJF_LABEL_MODES)[number]
+export type SjfHorizontalAlign = 'left' | 'center' | 'right'
 
 /**
  * Label defaults/options that can be provided by SjfForm or by an input-like component.
@@ -23,6 +24,8 @@ export interface SjfLabelOption {
   helper?: string
   colSpan?: number
   rowSpan?: number
+  /** Horizontal alignment of the Label text/cell. */
+  align?: SjfHorizontalAlign
 }
 
 export interface SjfLabelProps {
@@ -40,6 +43,8 @@ export interface SjfLabelProps {
   disabled?: boolean
   error?: boolean
   helper?: string
+  labelAlign?: SjfHorizontalAlign
+  contentAlign?: SjfHorizontalAlign
 
   /** Runtime state normally supplied by the hosting input-like component. */
   focused?: boolean
