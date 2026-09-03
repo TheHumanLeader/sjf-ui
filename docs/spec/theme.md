@@ -235,7 +235,41 @@ SJF-UI 以 Material 3 为基础，但默认面向办公、后台、管理系统�
 
 ---
 
-## 8. 组件不得私建主题色
+## 8. 可选业务语义色
+
+Material 3 核心系统中已经提供 `error`，但办公/后台系统经常还需要稳定表达：
+
+```text
+success
+warning
+info
+```
+
+SJF-UI 不为这些颜色另造一套独立颜色理论，而是将它们定义为**可选 Material Custom Colors**。
+
+推荐结构：
+
+```ts
+createTheme({
+  name: 'office-blue',
+  seed: '#3F6FED',
+  customColors: {
+    success: '#2E7D32',
+    warning: '#ED6C02',
+    info: '#0288D1'
+  }
+})
+```
+
+这些颜色应通过 Material Color Utilities 生成/协调其 light、dark、container、on-* 等配套角色，而不是只保存单个十六进制值。
+
+因此业务语义色仍属于 Material 主题体系的一部分，而不是组件私有色。
+
+如果产品不需要对应业务语义，则无需注册。
+
+---
+
+## 9. 组件不得私建主题色
 
 组件不得自行定义类似：
 
@@ -263,12 +297,14 @@ SJF-UI 以 Material 3 为基础，但默认面向办公、后台、管理系统�
 
 ---
 
-## 9. 当前结论
+## 10. 当前结论
 
 SJF-UI Theme v0.1：
 
 ```text
 Material 3 Color Roles
+        +
+可选 Material Custom Colors
         ↓
 Material Color Scheme
         ↓
