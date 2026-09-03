@@ -34,7 +34,7 @@
         :value="localValue"
         :type="resolvedType"
         :name="props.name"
-        :placeholder="props.placeholder ?? ''"
+        :placeholder="resolvedPlaceholder"
         :autocomplete="props.autocomplete"
         :required="resolvedRequired"
         :disabled="resolvedDisabled"
@@ -146,6 +146,12 @@ const embedded = computed(() =>
   resolvedMode.value === 'm3' || resolvedMode.value.includes('box'),
 )
 const filled = computed(() => String(localValue.value ?? '').length > 0)
+const hasLabel = computed(() => Boolean(props.label || slots.label))
+const resolvedPlaceholder = computed(() => {
+  const placeholder = props.placeholder ?? ''
+  if (resolvedMode.value !== 'm3' || !hasLabel.value) return placeholder
+  return focused.value ? placeholder : ''
+})
 const resolvedType = computed(() => {
   if (props.type === 'password' && props.showPassword && passwordVisible.value) return 'text'
   return props.type ?? 'text'
