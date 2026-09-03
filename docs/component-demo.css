@@ -1,0 +1,7 @@
+.sjf-label .doc-input:not(.doc-input--m3):not(.doc-input--embedded) {
+  min-height: var(--sjf-label-control-height, 40px);
+  border-radius: var(--sjf-label-radius, 8px);
+  padding-inline: var(--sjf-label-padding-x, 12px);
+  padding-block: var(--sjf-label-padding-y, 8px);
+  font-size: var(--sjf-label-font-size, 14px);
+}
