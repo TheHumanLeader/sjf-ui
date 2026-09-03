@@ -123,6 +123,76 @@ body {
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--md-sys-color-primary) 13%, transparent);
 }
 
+.theme-preset-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.theme-preset {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+  padding: 18px;
+  border: 1px solid var(--docs-border);
+  border-radius: 15px;
+  background: var(--md-sys-color-surface-container-lowest);
+}
+
+.theme-preset strong {
+  font-size: 14px;
+}
+
+.theme-preset p {
+  margin: 7px 0 0;
+  color: var(--md-sys-color-on-surface-variant);
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.theme-preset__visual {
+  height: 74px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: end;
+  gap: 4px;
+  padding: 8px;
+  border-radius: 11px;
+  overflow: hidden;
+}
+
+.theme-preset__visual span {
+  display: block;
+  min-height: 24px;
+  border-radius: 6px;
+}
+
+.theme-preset__visual span:nth-child(2) { min-height: 36px; }
+.theme-preset__visual span:nth-child(3) { min-height: 48px; }
+.theme-preset__visual span:nth-child(4) { min-height: 30px; }
+
+.theme-preset--pink .theme-preset__visual {
+  background: #fff8fa;
+}
+
+.theme-preset--pink .theme-preset__visual span:nth-child(1) { background: #b73e6f; }
+.theme-preset--pink .theme-preset__visual span:nth-child(2) { background: #ffd9e5; }
+.theme-preset--pink .theme-preset__visual span:nth-child(3) { background: #f9e9ee; }
+.theme-preset--pink .theme-preset__visual span:nth-child(4) { background: #d5c2c8; }
+
+.theme-preset--starry .theme-preset__visual {
+  background:
+    radial-gradient(circle at 70% 12%, rgb(174 198 255 / 0.3), transparent 24px),
+    #0b1020;
+}
+
+.theme-preset--starry .theme-preset__visual span:nth-child(1) { background: #aec6ff; }
+.theme-preset--starry .theme-preset__visual span:nth-child(2) { background: #304979; }
+.theme-preset--starry .theme-preset__visual span:nth-child(3) { background: #151c31; }
+.theme-preset--starry .theme-preset__visual span:nth-child(4) { background: #7ddce7; }
+
 html[data-sjf-theme='starry'] {
   --docs-code-bg: #050914;
   --docs-code-fg: #dce6ff;
@@ -169,4 +239,10 @@ html[data-sjf-theme='starry'] .hero > * {
 html[data-sjf-theme='starry'] .brand-mark {
   background: linear-gradient(145deg, #718fff, #63d4df);
   box-shadow: 0 5px 18px rgb(101 140 255 / 0.28);
+}
+
+@media (max-width: 760px) {
+  .theme-preset-grid {
+    grid-template-columns: 1fr;
+  }
 }
