@@ -27,6 +27,17 @@
           />
           <kbd>/</kbd>
         </label>
+
+        <button
+          class="theme-toggle"
+          type="button"
+          :title="currentTheme === 'pink' ? '切换到星空主题' : '切换到粉色主题'"
+          @click="toggleTheme"
+        >
+          <span class="theme-toggle__dot" aria-hidden="true"></span>
+          {{ currentTheme === 'pink' ? '粉色' : '星空' }}
+        </button>
+
         <span class="version-chip">v0.1</span>
         <a
           class="icon-link"
@@ -68,6 +79,7 @@
 
 <script setup vapor lang="ts">
 import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { readStoredSjfTheme, setSjfTheme, type SjfThemeName } from '@/core/theme'
 import HomePage from './pages/HomePage.vue'
 import FoundationsPage from './pages/FoundationsPage.vue'
 import LabelPage from './pages/LabelPage.vue'
@@ -118,6 +130,7 @@ const navigation: NavigationGroup[] = [
 
 const route = ref(readRoute())
 const query = ref('')
+const currentTheme = ref<SjfThemeName>(readStoredSjfTheme())
 
 const filteredNavigation = computed(() => {
   const keyword = query.value.trim().toLowerCase()
@@ -149,6 +162,12 @@ function goFirstSearchResult(): void {
   if (!first) return
   window.location.hash = first.path
   query.value = ''
+}
+
+function toggleTheme(): void {
+  const next: SjfThemeName = currentTheme.value === 'pink' ? 'starry' : 'pink'
+  currentTheme.value = next
+  setSjfTheme(next)
 }
 
 function focusSearch(event: KeyboardEvent): void {
