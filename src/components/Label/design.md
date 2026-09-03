@@ -2,7 +2,7 @@
 
 > 状态：Accepted / v0.1
 >
-> 设计稿：`design.jpg`
+> 设计稿：`design.svg`
 >
 > 组件定位：通用标签 + 内容布局壳。所有输入类组件后续默认内置 Label，默认 `mode="m3"`。
 
@@ -53,7 +53,7 @@ focusLineWidth  +1
 
 所以全局 base size 从 `nm` 调到 `md` 时，组件所有尺寸关系会整体上移一级，同时保持内部比例。
 
-`design.jpg` 中出现的具体尺寸数字仅用于视觉说明；实现以 `src/core/size/index.ts` 为唯一尺寸来源。
+`design.svg` 中出现的具体尺寸数字仅用于视觉说明；实现以 `src/core/size/index.ts` 为唯一尺寸来源。
 
 ## 3. Color / Style
 
