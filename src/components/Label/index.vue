@@ -2,11 +2,11 @@
   <div
     class="sjf-label"
     :class="rootClasses"
-    :style="sizeStyle"
-    :data-mode="props.mode"
+    :style="rootStyle"
+    :data-mode="resolvedMode"
     :data-size="effectiveSize"
   >
-    <template v-if="props.mode === 'm3'">
+    <template v-if="resolvedMode === 'm3'">
       <div class="sjf-label__stack">
         <div class="sjf-label__m3-shell">
           <div class="sjf-label__m3-content">
@@ -17,9 +17,9 @@
             v-if="hasLabel"
             class="sjf-label__m3-caption"
             :text="props.label"
-            :required="props.required"
-            :disabled="props.disabled"
-            :error="props.error"
+            :required="resolvedRequired"
+            :disabled="resolvedDisabled"
+            :error="resolvedError"
             :floating="true"
             :shrunk="isShrunk"
           >
@@ -28,73 +28,73 @@
         </div>
 
         <LabelHelper
-          v-if="props.helper"
+          v-if="resolvedHelper"
           class="sjf-label__helper-offset"
-          :text="props.helper"
-          :error="props.error"
-          :disabled="props.disabled"
+          :text="resolvedHelper"
+          :error="resolvedError"
+          :disabled="resolvedDisabled"
         />
       </div>
     </template>
 
-    <template v-else-if="props.mode === 'horizontal'">
+    <template v-else-if="resolvedMode === 'horizontal'">
       <div class="sjf-label__horizontal">
-        <div v-if="hasLabel" class="sjf-label__label-cell">
+        <div v-if="hasLabel" class="sjf-label__label-cell sjf-label__grid-label-cell">
           <LabelCaption
             :text="props.label"
-            :required="props.required"
-            :disabled="props.disabled"
-            :error="props.error"
+            :required="resolvedRequired"
+            :disabled="resolvedDisabled"
+            :error="resolvedError"
           >
             <slot name="label">{{ props.label }}</slot>
           </LabelCaption>
         </div>
 
-        <div class="sjf-label__body">
+        <div class="sjf-label__body sjf-label__grid-control-cell">
           <slot />
           <LabelHelper
-            v-if="props.helper"
-            :text="props.helper"
-            :error="props.error"
-            :disabled="props.disabled"
+            v-if="resolvedHelper"
+            :text="resolvedHelper"
+            :error="resolvedError"
+            :disabled="resolvedDisabled"
           />
         </div>
       </div>
     </template>
 
-    <template v-else-if="props.mode === 'horizontal-box'">
+    <template v-else-if="resolvedMode === 'horizontal-box'">
       <div class="sjf-label__box sjf-label__box--horizontal">
-        <div v-if="hasLabel" class="sjf-label__box-label">
+        <div v-if="hasLabel" class="sjf-label__box-label sjf-label__grid-label-cell">
           <LabelCaption
             :text="props.label"
-            :required="props.required"
-            :disabled="props.disabled"
-            :error="props.error"
+            :required="resolvedRequired"
+            :disabled="resolvedDisabled"
+            :error="resolvedError"
           >
             <slot name="label">{{ props.label }}</slot>
           </LabelCaption>
         </div>
 
-        <div class="sjf-label__box-content">
+        <div class="sjf-label__box-content sjf-label__grid-control-cell">
           <slot />
           <LabelHelper
-            v-if="props.helper"
-            :text="props.helper"
-            :error="props.error"
-            :disabled="props.disabled"
+            v-if="resolvedHelper"
+            :text="resolvedHelper"
+            :error="resolvedError"
+            :disabled="resolvedDisabled"
           />
         </div>
       </div>
     </template>
 
-    <template v-else-if="props.mode === 'vertical'">
+    <template v-else-if="resolvedMode === 'vertical'">
       <div class="sjf-label__stack">
         <LabelCaption
           v-if="hasLabel"
           :text="props.label"
-          :required="props.required"
-          :disabled="props.disabled"
-          :error="props.error"
+          :required="resolvedRequired"
+          :disabled="resolvedDisabled"
+          :error="resolvedError"
         >
           <slot name="label">{{ props.label }}</slot>
         </LabelCaption>
@@ -102,10 +102,10 @@
         <div class="sjf-label__body">
           <slot />
           <LabelHelper
-            v-if="props.helper"
-            :text="props.helper"
-            :error="props.error"
-            :disabled="props.disabled"
+            v-if="resolvedHelper"
+            :text="resolvedHelper"
+            :error="resolvedError"
+            :disabled="resolvedDisabled"
           />
         </div>
       </div>
@@ -116,9 +116,9 @@
         <div v-if="hasLabel" class="sjf-label__box-label sjf-label__box-label--vertical">
           <LabelCaption
             :text="props.label"
-            :required="props.required"
-            :disabled="props.disabled"
-            :error="props.error"
+            :required="resolvedRequired"
+            :disabled="resolvedDisabled"
+            :error="resolvedError"
           >
             <slot name="label">{{ props.label }}</slot>
           </LabelCaption>
@@ -127,10 +127,10 @@
         <div class="sjf-label__box-content">
           <slot />
           <LabelHelper
-            v-if="props.helper"
-            :text="props.helper"
-            :error="props.error"
-            :disabled="props.disabled"
+            v-if="resolvedHelper"
+            :text="resolvedHelper"
+            :error="resolvedError"
+            :disabled="resolvedDisabled"
           />
         </div>
       </div>
@@ -141,36 +141,72 @@
 <script setup vapor lang="ts">
 import { computed } from 'vue'
 import { resolveSjfSizeRecipe, useSjfBaseSize } from '../../core/size'
+import { useSjfFormContext } from '../Form/context'
 import { SJF_LABEL_SIZE_RECIPE, type SjfLabelProps } from './index'
 import LabelCaption from './cps/LabelCaption.vue'
 import LabelHelper from './cps/LabelHelper.vue'
 
-const props = withDefaults(defineProps<SjfLabelProps>(), {
-  label: '',
-  mode: 'm3',
-  required: false,
-  disabled: false,
-  error: false,
-  focused: false,
-  filled: false,
-  helper: '',
-})
+const props = defineProps<SjfLabelProps>()
 
 const slots = defineSlots<{
   default?: () => unknown
   label?: () => unknown
 }>()
 
+const form = useSjfFormContext()
 const globalBaseSize = useSjfBaseSize()
-const effectiveSize = computed(() => props.size ?? globalBaseSize.value)
+const ownOption = computed(() => props.labelOption ?? {})
+const formOption = computed(() => form?.labelOption.value ?? {})
+
+const resolvedMode = computed(() =>
+  props.mode ?? ownOption.value.mode ?? formOption.value.mode ?? 'm3',
+)
+const effectiveSize = computed(() =>
+  props.size ?? ownOption.value.size ?? formOption.value.size ?? form?.size.value ?? globalBaseSize.value,
+)
+const resolvedRequired = computed(() =>
+  props.required ?? ownOption.value.required ?? formOption.value.required ?? false,
+)
+const resolvedDisabled = computed(() =>
+  props.disabled ?? ownOption.value.disabled ?? formOption.value.disabled ?? false,
+)
+const resolvedError = computed(() =>
+  props.error ?? ownOption.value.error ?? formOption.value.error ?? false,
+)
+const resolvedHelper = computed(() =>
+  props.helper ?? ownOption.value.helper ?? formOption.value.helper ?? '',
+)
+
+const labelColSpan = computed(() => normalizeSpan(ownOption.value.colSpan ?? formOption.value.colSpan ?? 1))
+const labelRowSpan = computed(() => normalizeSpan(ownOption.value.rowSpan ?? formOption.value.rowSpan ?? 1))
+const controlColSpan = computed(() => normalizeSpan(props.colSpan ?? 1))
+const controlRowSpan = computed(() => normalizeSpan(props.rowSpan ?? 1))
+
+const isSplitGrid = computed(() =>
+  Boolean(form) && (resolvedMode.value === 'horizontal' || resolvedMode.value === 'horizontal-box'),
+)
+
+const combinedColSpan = computed(() => {
+  if (!form) return 1
+  const columns = form.columns.value
+  if (resolvedMode.value === 'm3') {
+    return Math.min(columns, labelColSpan.value + controlColSpan.value)
+  }
+  return Math.min(columns, Math.max(labelColSpan.value, controlColSpan.value))
+})
+
+const combinedRowSpan = computed(() =>
+  Math.max(labelRowSpan.value, controlRowSpan.value),
+)
+
 const hasLabel = computed(() => Boolean(props.label || slots.label))
-const isShrunk = computed(() => props.focused || props.filled)
+const isShrunk = computed(() => Boolean(props.focused || props.filled))
 
 const resolvedSize = computed(() =>
   resolveSjfSizeRecipe(effectiveSize.value, SJF_LABEL_SIZE_RECIPE),
 )
 
-const sizeStyle = computed(() => ({
+const rootStyle = computed(() => ({
   '--sjf-label-font-size': resolvedSize.value.fontSize,
   '--sjf-label-floating-font-size': resolvedSize.value.floatingFontSize,
   '--sjf-label-helper-font-size': resolvedSize.value.helperFontSize,
@@ -184,16 +220,31 @@ const sizeStyle = computed(() => ({
   '--sjf-label-caption-padding-x': resolvedSize.value.captionPaddingX,
   '--sjf-label-line-width': resolvedSize.value.lineWidth,
   '--sjf-label-focus-line-width': resolvedSize.value.focusLineWidth,
+  '--sjf-label-grid-label-col-span': String(labelColSpan.value),
+  '--sjf-label-grid-label-row-span': String(labelRowSpan.value),
+  '--sjf-label-grid-control-col-span': String(controlColSpan.value),
+  '--sjf-label-grid-control-row-span': String(controlRowSpan.value),
+  '--sjf-label-grid-combined-col-span': String(combinedColSpan.value),
+  '--sjf-label-grid-combined-row-span': String(combinedRowSpan.value),
 }))
 
 const rootClasses = computed(() => ({
-  'is-required': props.required,
-  'is-disabled': props.disabled,
-  'is-error': props.error,
-  'is-focused': props.focused,
-  'is-filled': props.filled,
-  'is-box': props.mode.includes('box'),
+  'is-required': resolvedRequired.value,
+  'is-disabled': resolvedDisabled.value,
+  'is-error': resolvedError.value,
+  'is-focused': Boolean(props.focused),
+  'is-filled': Boolean(props.filled),
+  'is-box': resolvedMode.value.includes('box'),
+  'is-m3': resolvedMode.value === 'm3',
+  'is-form-grid': Boolean(form),
+  'is-split-grid': isSplitGrid.value,
+  'is-form-box-group': Boolean(form?.boxGroup.value && resolvedMode.value === 'horizontal-box'),
 }))
+
+function normalizeSpan(value: number): number {
+  if (!Number.isFinite(value)) return 1
+  return Math.max(1, Math.floor(value))
+}
 </script>
 
 <style scoped>
@@ -201,7 +252,7 @@ const rootClasses = computed(() => ({
   --sjf-label-color: var(--md-sys-color-on-surface, #1d1b20);
   --sjf-label-muted-color: var(--md-sys-color-on-surface-variant, #49454f);
   --sjf-label-border-color: var(--md-sys-color-outline-variant, #cac4d0);
-  --sjf-label-focus-color: var(--md-sys-color-primary, #4f64d9);
+  --sjf-label-focus-color: var(--md-sys-color-primary, #b73e6f);
   --sjf-label-error-color: var(--md-sys-color-error, #ba1a1a);
   --sjf-label-surface: var(--md-sys-color-surface, #fff);
   --sjf-label-box-label-surface: color-mix(
@@ -211,12 +262,40 @@ const rootClasses = computed(() => ({
   );
   --sjf-control-embedded: 0;
 
+  min-width: 0;
   color: var(--sjf-label-color);
   font-size: var(--sjf-label-font-size);
 }
 
-.sjf-label.is-box {
+.sjf-label.is-box,
+.sjf-label.is-m3 {
   --sjf-control-embedded: 1;
+}
+
+.sjf-label.is-form-grid:not(.is-split-grid) {
+  grid-column: span var(--sjf-label-grid-combined-col-span);
+  grid-row: span var(--sjf-label-grid-combined-row-span);
+}
+
+.sjf-label.is-split-grid {
+  display: contents;
+}
+
+.sjf-label.is-split-grid .sjf-label__horizontal,
+.sjf-label.is-split-grid .sjf-label__box--horizontal {
+  display: contents;
+}
+
+.sjf-label.is-split-grid .sjf-label__grid-label-cell {
+  min-width: 0;
+  grid-column: span var(--sjf-label-grid-label-col-span);
+  grid-row: span var(--sjf-label-grid-label-row-span);
+}
+
+.sjf-label.is-split-grid .sjf-label__grid-control-cell {
+  min-width: 0;
+  grid-column: span var(--sjf-label-grid-control-col-span);
+  grid-row: span var(--sjf-label-grid-control-row-span);
 }
 
 .sjf-label__stack,
@@ -261,7 +340,8 @@ const rootClasses = computed(() => ({
 
 .sjf-label.is-focused .sjf-label__m3-shell {
   border-color: var(--sjf-label-focus-color);
-  box-shadow: inset 0 0 0 var(--sjf-label-focus-line-width) color-mix(in srgb, var(--sjf-label-focus-color) 28%, transparent);
+  box-shadow: inset 0 0 0 var(--sjf-label-focus-line-width)
+    color-mix(in srgb, var(--sjf-label-focus-color) 28%, transparent);
 }
 
 .sjf-label.is-error .sjf-label__m3-shell {
@@ -344,6 +424,16 @@ const rootClasses = computed(() => ({
   justify-content: center;
   padding-inline: var(--sjf-label-padding-x);
   padding-block: var(--sjf-label-padding-y);
+}
+
+.sjf-label.is-form-box-group .sjf-label__box-label,
+.sjf-label.is-form-box-group .sjf-label__box-content {
+  border: 0;
+  border-radius: 0;
+}
+
+.sjf-label.is-form-box-group .sjf-label__box-content {
+  background: var(--sjf-label-surface);
 }
 
 .sjf-label.is-focused .sjf-label__box {
