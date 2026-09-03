@@ -13,7 +13,7 @@ import {
 } from './core/overlay'
 import { vSjfOverlayAnchor } from './directives/overlayAnchor'
 
-export interface SjfUIApi extends Plugin {
+export type SjfUIApi = Plugin<[SjfUIConfig?]> & {
   configure: (config: SjfUIConfig) => void
   setDefaultSize: (size: SjfSize) => void
   registerSize: (name: SjfSize, options: RegisterSizeOptions) => void
