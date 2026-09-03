@@ -8,6 +8,7 @@
     :size="props.size"
     :label-align="props.labelAlign"
     :content-align="props.contentAlign"
+    :error-display="props.errorDisplay"
     :required="resolvedRequired"
     :disabled="resolvedDisabled"
     :error="resolvedError"

@@ -113,7 +113,49 @@ focused           -> primary role
 
 Label 不自行监听 DOM 焦点；由 Input 等宿主控件将状态传入。
 
-## 6. API
+## 6. Error Display
+
+错误状态与错误文案展示方式分离：
+
+```ts
+type SjfLabelErrorDisplay = 'message' | 'icon'
+```
+
+### message（默认）
+
+- 保留 Material 3 常见的字段下方错误文案。
+- 当 `mode="m3" && error=true` 时，错误文案使用相对字段的 `position: absolute` 悬浮定位。
+- 错误文案不参与 Form / Grid 高度计算，因此单个字段报错不会把整行表单撑高。
+- 这里刻意不使用 viewport 级 `position: fixed`，滚动页面时文案必须跟随字段。
+- 非 error 的普通 helper 仍按正常文档流展示。
+
+### icon
+
+- 保留 error role 高亮，但不常驻展示错误文案。
+- 显示一个 `!` 错误标记。
+- hover 或键盘 focus `!` 时，以 tooltip 展示错误文案。
+- `helper` 仍作为错误文案来源；未提供 helper 时回退为“字段内容有误”。
+- Box Group 中不额外叠加第二层边框，而通过 error tint 强化错误单元格，避免再次出现双线。
+
+Form 可以统一设置：
+
+```vue
+<SjfForm error-display="icon">
+  ...
+</SjfForm>
+```
+
+局部字段可以覆盖：
+
+```vue
+<SjfInput
+  error
+  helper="工号格式不正确"
+  error-display="message"
+/>
+```
+
+## 7. API
 
 ```ts
 interface SjfLabelProps {
@@ -126,20 +168,21 @@ interface SjfLabelProps {
   focused?: boolean
   filled?: boolean
   helper?: string
+  errorDisplay?: 'message' | 'icon'
 }
 ```
 
 `size` 未传时使用全局 `SJF Base Size`；初始全局值为 `nm`。
 
-## 7. Slots
+## 8. Slots
 
 ```text
 default   内容区域
 label     自定义 Label 内容
 ```
 
-## 8. Image Generation Prompt
+## 9. Image Generation Prompt
 
 用于重新生成 / 演进本组件设计图的提示词：
 
-> Create a clean high-resolution UI component specification sheet for **SJF-UI Label**, a Vue 3 Vapor Mode enterprise component library. Base the visual language on **Material Design 3**, but make it practical, compact, office-oriented and suitable for Chinese enterprise admin systems. Show exactly five Label modes: **m3**, **horizontal**, **horizontal-box**, **vertical**, **vertical-box**. For every mode show default, focused, filled and error examples. The box modes must resemble a clean bordered description/table cell structure with one shared border, never an input nested inside another border. Also show the ordered size system **mn < sm < nm < md < lg**, with **nm** as the normal center, and explain that component spacing, height, gap, radius and border thickness are relative size recipes rather than independent hard-coded sizes. Use Material 3 semantic colors: primary, on-surface, on-surface-variant, outline-variant, error and surface-container. White/light neutral canvas, restrained blue-purple M3 accent, crisp Chinese labels, high information density, subtle professional elevation, no decorative gradients, no excessive roundness. Include API examples and the rule that all future input controls embed this Label and default to m3 mode.
+> Create a clean high-resolution UI component specification sheet for **SJF-UI Label**, a Vue 3 Vapor Mode enterprise component library. Base the visual language on **Material Design 3**, but make it practical, compact, office-oriented and suitable for Chinese enterprise admin systems. Show exactly five Label modes: **m3**, **horizontal**, **horizontal-box**, **vertical**, **vertical-box**. For every mode show default, focused, filled and error examples. The box modes must resemble a clean bordered description/table cell structure with one shared border, never an input nested inside another border. Also show the ordered size system **mn < sm < nm < md < lg**, with **nm** as the normal center, and explain that component spacing, height, gap, radius and border thickness are relative size recipes rather than independent hard-coded sizes. Use Material 3 semantic colors: primary, on-surface, on-surface-variant, outline-variant, error and surface-container. White/light neutral canvas, restrained professional accent, crisp Chinese labels, high information density, subtle professional elevation, no decorative gradients, no excessive roundness. Include two error display modes: a Material-style message below the field that is absolutely positioned and does not consume layout height, plus a compact error-only mode with a `!` indicator whose tooltip appears on hover/focus. Include API examples and the rule that all future input controls embed this Label and default to m3 mode.

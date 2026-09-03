@@ -10,7 +10,10 @@ export const SJF_LABEL_MODES = [
   'vertical-box',
 ] as const
 
+export const SJF_LABEL_ERROR_DISPLAYS = ['message', 'icon'] as const
+
 export type SjfLabelMode = (typeof SJF_LABEL_MODES)[number]
+export type SjfLabelErrorDisplay = (typeof SJF_LABEL_ERROR_DISPLAYS)[number]
 export type SjfHorizontalAlign = 'left' | 'center' | 'right'
 
 /**
@@ -24,6 +27,8 @@ export interface SjfLabelOption {
   disabled?: boolean
   error?: boolean
   helper?: string
+  /** How error text is presented when error=true. */
+  errorDisplay?: SjfLabelErrorDisplay
   colSpan?: number
   rowSpan?: number
   /** Horizontal alignment of the Label text/cell. */
@@ -45,6 +50,7 @@ export interface SjfLabelProps {
   disabled?: boolean
   error?: boolean
   helper?: string
+  errorDisplay?: SjfLabelErrorDisplay
   labelAlign?: SjfHorizontalAlign
   contentAlign?: SjfHorizontalAlign
 

@@ -1,5 +1,9 @@
 import type { SjfSize } from '../../core/size'
-import type { SjfHorizontalAlign, SjfLabelOption } from '../Label'
+import type {
+  SjfHorizontalAlign,
+  SjfLabelErrorDisplay,
+  SjfLabelOption,
+} from '../Label'
 
 export type SjfInputModelValue = string | number | null | undefined
 
@@ -15,6 +19,7 @@ export interface SjfInputProps {
   size?: SjfSize
   labelAlign?: SjfHorizontalAlign
   contentAlign?: SjfHorizontalAlign
+  errorDisplay?: SjfLabelErrorDisplay
 
   // Native input essentials
   type?: string

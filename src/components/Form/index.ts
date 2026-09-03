@@ -1,5 +1,10 @@
 import type { SjfSize } from '../../core/size'
-import type { SjfHorizontalAlign, SjfLabelMode, SjfLabelOption } from '../Label'
+import type {
+  SjfHorizontalAlign,
+  SjfLabelErrorDisplay,
+  SjfLabelMode,
+  SjfLabelOption,
+} from '../Label'
 
 export interface SjfFormProps {
   columns?: number
@@ -9,6 +14,7 @@ export interface SjfFormProps {
   labelOption?: SjfLabelOption
   labelAlign?: SjfHorizontalAlign
   contentAlign?: SjfHorizontalAlign
+  errorDisplay?: SjfLabelErrorDisplay
 }
 
 export interface SjfFormCellOption {
