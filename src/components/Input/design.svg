@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="760" viewBox="0 0 1280 760">
+  <rect width="1280" height="760" fill="#fff8fa"/>
+  <style>
+    .title{font:700 30px system-ui,sans-serif;fill:#211a1d}.sub{font:400 14px system-ui,sans-serif;fill:#6b5960}.h{font:700 14px system-ui,sans-serif;fill:#211a1d}.t{font:500 13px system-ui,sans-serif;fill:#514347}.small{font:500 11px system-ui,sans-serif;fill:#837378}.field{fill:#fff;stroke:#d5c2c8;stroke-width:1}.focus{fill:#fff;stroke:#b73e6f;stroke-width:2}.error{fill:#fff;stroke:#ba1a1a;stroke-width:1.5}.soft{fill:#fff0f4}.pill{fill:#ffd9e5}.pink{fill:#b73e6f}.white{fill:#fff}.line{stroke:#d5c2c8;stroke-width:1}
+  </style>
+  <text x="56" y="58" class="title">SJF-UI · Input v0.1</text>
+  <text x="56" y="84" class="sub">Control Shell · Label / Form / Size / Theme / Motion integrated</text>
+
+  <text x="56" y="130" class="h">01 · Control Shell</text>
+  <rect x="56" y="150" width="560" height="62" rx="10" class="focus"/>
+  <rect x="74" y="168" width="28" height="28" rx="8" class="pill"/>
+  <text x="88" y="187" text-anchor="middle" class="h">@</text>
+  <text x="120" y="187" class="t">human</text>
+  <text x="486" y="187" class="small">sjf.dev</text>
+  <circle cx="575" cy="181" r="12" class="soft"/>
+  <text x="575" y="185" text-anchor="middle" class="t">×</text>
+  <text x="56" y="236" class="small">prefix</text><text x="120" y="236" class="small">native input</text><text x="486" y="236" class="small">suffix</text><text x="554" y="236" class="small">action</text>
+
+  <text x="56" y="292" class="h">02 · Label Modes</text>
+  <text x="56" y="320" class="small">M3</text>
+  <rect x="56" y="334" width="360" height="58" rx="10" class="field"/>
+  <rect x="72" y="326" width="70" height="18" class="white"/>
+  <text x="78" y="339" class="small">用户名</text>
+  <text x="78" y="370" class="t">TheHumanLeader</text>
+
+  <text x="456" y="320" class="small">horizontal</text>
+  <text x="456" y="368" class="t">用户名</text>
+  <rect x="530" y="334" width="320" height="58" rx="10" class="field"/>
+  <text x="550" y="369" class="t">TheHumanLeader</text>
+
+  <text x="890" y="320" class="small">horizontal-box</text>
+  <rect x="890" y="334" width="330" height="58" rx="10" class="field"/>
+  <rect x="890" y="334" width="110" height="58" rx="10" class="soft"/>
+  <line x1="1000" y1="334" x2="1000" y2="392" class="line"/>
+  <text x="916" y="369" class="t">用户名</text>
+  <text x="1020" y="369" class="t">TheHumanLeader</text>
+
+  <text x="56" y="456" class="h">03 · States</text>
+  <text x="56" y="484" class="small">normal</text>
+  <rect x="56" y="496" width="260" height="54" rx="10" class="field"/>
+  <text x="76" y="529" class="t">Normal</text>
+
+  <text x="344" y="484" class="small">focus</text>
+  <rect x="344" y="496" width="260" height="54" rx="10" class="focus"/>
+  <text x="364" y="529" class="t">Focused</text>
+
+  <text x="632" y="484" class="small">readonly</text>
+  <rect x="632" y="496" width="260" height="54" rx="10" class="soft" stroke="#d5c2c8"/>
+  <text x="652" y="529" class="t">Readonly</text>
+
+  <text x="920" y="484" class="small">error</text>
+  <rect x="920" y="496" width="260" height="54" rx="10" class="error"/>
+  <text x="940" y="529" class="t">BAD-001</text>
+
+  <text x="56" y="614" class="h">04 · Actions</text>
+  <rect x="56" y="632" width="350" height="56" rx="10" class="field"/>
+  <text x="76" y="666" class="t">abcdefghijkl</text>
+  <text x="300" y="666" class="small">12 / 24</text>
+  <circle cx="378" cy="660" r="12" class="soft"/>
+  <text x="378" y="664" text-anchor="middle" class="t">×</text>
+
+  <rect x="444" y="632" width="350" height="56" rx="10" class="field"/>
+  <text x="464" y="666" class="t">••••••••••</text>
+  <rect x="714" y="646" width="60" height="28" rx="14" class="soft"/>
+  <text x="744" y="665" text-anchor="middle" class="small">显示</text>
+
+  <rect x="832" y="632" width="388" height="56" rx="10" class="soft"/>
+  <rect x="850" y="646" width="28" height="28" rx="8" class="pill"/>
+  <text x="864" y="665" text-anchor="middle" class="h">部</text>
+  <text x="892" y="656" class="h">所属部门</text>
+  <text x="892" y="674" class="small">当前组织归属</text>
+
+  <text x="56" y="726" class="sub">Principle: native input edits text; SJF Control Shell owns structure and state.</text>
+</svg>
