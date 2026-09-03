@@ -61,7 +61,11 @@ const classes = computed(() => ({
   text-overflow: ellipsis;
 }
 
+/* Rich label content may have Title + Subtitle. Keep the required marker next
+ * to the title line instead of vertically centering it beside the whole block. */
 .sjf-label-caption__required {
+  align-self: flex-start;
+  margin-top: 0.08em;
   color: var(--sjf-label-error-color);
   font-weight: 600;
 }

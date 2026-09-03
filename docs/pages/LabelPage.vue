@@ -91,6 +91,75 @@
 
     <section class="section">
       <div class="section-head">
+        <h2>Rich Label · Icon + Title + Subtitle</h2>
+        <p>Label 不局限于单行文字。SjfLabelContent 提供图标、主标题、副标题三段结构，图标相对 Title + Subtitle 整体垂直居中。</p>
+      </div>
+
+      <article class="demo-card">
+        <div class="demo-titlebar">
+          <strong>Rich Label Content</strong>
+          <code>icon · title · subtitle</code>
+        </div>
+        <div class="demo-stage">
+          <div class="demo-grid">
+            <div>
+              <div class="demo-label">SjfLabel · horizontal-box</div>
+              <SjfLabel mode="horizontal-box" required>
+                <template #label>
+                  <SjfLabelContent title="账号信息" subtitle="用于登录与身份识别">
+                    <template #icon>
+                      <span class="rich-label-icon">人</span>
+                    </template>
+                  </SjfLabelContent>
+                </template>
+                <input class="doc-input doc-input--embedded" value="TheHumanLeader" />
+              </SjfLabel>
+            </div>
+
+            <div>
+              <div class="demo-label">SjfInput · forwarded label slot</div>
+              <SjfInput
+                model-value="研发中心"
+                :label-option="{ mode: 'horizontal' }"
+                label-align="left"
+              >
+                <template #label>
+                  <SjfLabelContent title="所属部门" subtitle="当前组织归属">
+                    <template #icon>
+                      <span class="rich-label-icon">部</span>
+                    </template>
+                  </SjfLabelContent>
+                </template>
+              </SjfInput>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <div class="code-card">
+        <pre><code>&lt;SjfLabel mode="horizontal-box"&gt;
+  &lt;template #label&gt;
+    &lt;SjfLabelContent
+      title="账号信息"
+      subtitle="用于登录与身份识别"
+    &gt;
+      &lt;template #icon&gt;
+        &lt;UserIcon /&gt;
+      &lt;/template&gt;
+    &lt;/SjfLabelContent&gt;
+  &lt;/template&gt;
+
+  &lt;MyControl /&gt;
+&lt;/SjfLabel&gt;</code></pre>
+      </div>
+
+      <div class="callout">
+        M3 浮动 Label 继续保持短标题语义；Rich Label 主要用于 horizontal / horizontal-box / vertical / vertical-box。
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
         <h2>Size</h2>
         <p>Label 自身没有五套写死样式。它把相对 recipe 交给全局 Size Core 解析。</p>
       </div>
@@ -181,6 +250,7 @@
             <tr><td><code>focused</code></td><td>boolean</td><td>false</td><td>M3 浮动与 focus 视觉状态</td></tr>
             <tr><td><code>filled</code></td><td>boolean</td><td>false</td><td>M3 有值时保持浮动</td></tr>
             <tr><td><code>helper</code></td><td>string</td><td>''</td><td>辅助 / 错误说明</td></tr>
+            <tr><td><code>#label</code></td><td>slot</td><td>-</td><td>自定义 Label 内容，可使用 SjfLabelContent</td></tr>
           </tbody>
         </table>
       </div>
@@ -201,6 +271,8 @@
 <script setup vapor lang="ts">
 import { ref } from 'vue'
 import SjfLabel from '@/components/Label/index.vue'
+import SjfInput from '@/components/Input/index.vue'
+import { SjfLabelContent } from '@/components/Label'
 import {
   setSjfBaseSize,
   useSjfBaseSize,
@@ -231,6 +303,18 @@ function changeBaseSize(size: SjfBuiltinSize): void {
   border-color: var(--md-sys-color-primary);
   color: var(--md-sys-color-primary);
   background: var(--md-sys-color-primary-container);
+}
+
+.rich-label-icon {
+  width: 28px;
+  height: 28px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 9px;
+  background: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  font-size: 12px;
+  font-weight: 800;
 }
 
 .design-image-card {
