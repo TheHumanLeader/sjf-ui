@@ -2,11 +2,11 @@
   <SjfLabel
     :label="props.label"
     :label-option="props.labelOption"
-    :col-span="props.colSpan"
-    :row-span="props.rowSpan"
-    :required="props.required"
-    :disabled="props.disabled"
-    :error="props.error"
+    :col-span="props.colSpan ?? 1"
+    :row-span="props.rowSpan ?? 1"
+    :required="resolvedRequired"
+    :disabled="resolvedDisabled"
+    :error="resolvedError"
     :focused="focused"
     :filled="filled"
   >
@@ -14,13 +14,13 @@
       class="sjf-input__native"
       :class="{ 'is-embedded': embedded }"
       :value="localValue"
-      :type="props.type"
+      :type="props.type ?? 'text'"
       :name="props.name"
-      :placeholder="props.placeholder"
+      :placeholder="props.placeholder ?? ''"
       :autocomplete="props.autocomplete"
-      :required="props.required"
-      :disabled="props.disabled"
-      :readonly="props.readonly"
+      :required="resolvedRequired"
+      :disabled="resolvedDisabled"
+      :readonly="props.readonly ?? false"
       @focus="focused = true"
       @blur="focused = false"
       @input="onInput"
@@ -34,20 +34,7 @@ import SjfLabel from '../Label/index.vue'
 import { useSjfFormContext } from '../Form/context'
 import type { SjfInputProps, SjfInputModelValue } from './index'
 
-const props = withDefaults(defineProps<SjfInputProps>(), {
-  modelValue: '',
-  label: '',
-  type: 'text',
-  name: undefined,
-  placeholder: '',
-  autocomplete: undefined,
-  required: false,
-  disabled: false,
-  readonly: false,
-  error: false,
-  colSpan: 1,
-  rowSpan: 1,
-})
+const props = defineProps<SjfInputProps>()
 
 const emit = defineEmits<{
   'update:modelValue': [value: string]
@@ -55,17 +42,26 @@ const emit = defineEmits<{
 
 const form = useSjfFormContext()
 const focused = ref(false)
-const localValue = ref<SjfInputModelValue>(props.modelValue)
+const localValue = ref<SjfInputModelValue>(props.modelValue ?? '')
 
 watch(
   () => props.modelValue,
   (value) => {
-    localValue.value = value
+    if (value !== undefined) localValue.value = value
   },
 )
 
 const resolvedMode = computed(() =>
   props.labelOption?.mode ?? form?.labelOption.value.mode ?? 'm3',
+)
+const resolvedRequired = computed(() =>
+  props.required ?? props.labelOption?.required ?? form?.labelOption.value.required ?? false,
+)
+const resolvedDisabled = computed(() =>
+  props.disabled ?? props.labelOption?.disabled ?? form?.labelOption.value.disabled ?? false,
+)
+const resolvedError = computed(() =>
+  props.error ?? props.labelOption?.error ?? form?.labelOption.value.error ?? false,
 )
 
 const embedded = computed(() =>
