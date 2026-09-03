@@ -64,9 +64,14 @@ body {
 }
 
 .secondary-action,
-.doc-input,
-.doc-control {
+.doc-control,
+.doc-input:not(.doc-input--m3):not(.doc-input--embedded) {
   background: var(--md-sys-color-surface-container-lowest);
+}
+
+.doc-input--m3,
+.doc-input--embedded {
+  background: transparent;
 }
 
 .info-card,
