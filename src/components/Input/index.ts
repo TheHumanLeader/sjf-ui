@@ -8,6 +8,7 @@ export interface SjfInputProps {
 
   // Label / Form integration
   label?: string
+  helper?: string
   labelOption?: SjfLabelOption
   colSpan?: number
   rowSpan?: number
