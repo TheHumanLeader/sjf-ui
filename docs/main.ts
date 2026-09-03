@@ -1,7 +1,7 @@
 import { createVaporApp } from 'vue'
 import App from './App.vue'
 import { applySjfTheme, readStoredSjfTheme } from '@/core/theme'
-import '@/styles/base.css'
+import '@/styles/index.css'
 import './styles.css'
 import './theme.css'
 import './component-demo.css'
