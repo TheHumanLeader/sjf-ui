@@ -3,8 +3,33 @@
     <p class="page-kicker">FOUNDATIONS</p>
     <h1 class="page-title">设计基础</h1>
     <p class="page-subtitle">
-      SJF-UI 默认提供 Material 3 颜色、自动前景色、Ordered Size、通用布局与 Motion。组件只描述语义和相对关系，不重复发明基础样式。
+      SJF-UI 默认提供 Material 3 颜色、自动前景色、Ordered Size、通用布局、Motion 与 Overlay。组件只描述语义和相对关系，不重复发明基础样式。
     </p>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>SJFUI · Unified Configuration</h2>
+        <p>所有全局配置走同一个入口；底层函数保留给内部与高级场景，文档默认只推荐 SJFUI。</p>
+      </div>
+      <article class="spec-card">
+        <div class="code-card foundation-code-card">
+          <pre><code>app.use(SJFUI, {
+  defaultSize: 'nm',
+  theme: 'pink',
+  overlay: {
+    mount: () =&gt; '#sjf-overlay-root'
+  }
+})
+
+SJFUI.setDefaultSize('nm')
+SJFUI.setTheme('pink')
+SJFUI.setOverlayMount(() =&gt; document.querySelector('#overlay-root'))</code></pre>
+        </div>
+        <div class="callout">
+          Overlay mount 注册的是 <strong>resolver</strong>，真正打开悬浮层时才执行，不缓存一个可能已经失效的 DOM 节点。
+        </div>
+      </article>
+    </section>
 
     <section class="section">
       <div class="section-head">
@@ -155,6 +180,34 @@
 
     <section class="section">
       <div class="section-head">
+        <h2>Overlay / Floating Foundation</h2>
+        <p>Select、Popover、ContextMenu、Tooltip 统一使用同一套锚点测量、碰撞处理与滚动重定位。</p>
+      </div>
+
+      <OverlayFoundationDemo />
+
+      <div class="code-card" style="margin-top: 14px">
+        <pre><code>&lt;div
+  v-sjf-overlay-anchor="{
+    enabled: open,
+    panel: () =&gt; panelRef,
+    options: {
+      placement: 'bottom-start',
+      matchWidth: true,
+      flip: true,
+      shift: true
+    }
+  }"
+/&gt;</code></pre>
+      </div>
+
+      <div class="callout">
+        scroll / resize / VisualViewport / ResizeObserver 的刷新统一进入 requestAnimationFrame 调度器；同一帧多次变化只做一轮位置刷新。
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
         <h2>Form without FormItem</h2>
         <p>不要求用户多套一层 FormItem。</p>
       </div>
@@ -171,6 +224,7 @@
 
 <script setup vapor lang="ts">
 import { ref } from 'vue'
+import OverlayFoundationDemo from '../cps/OverlayFoundationDemo.vue'
 
 const motionDemoActive = ref(false)
 </script>
@@ -188,6 +242,10 @@ const motionDemoActive = ref(false)
   color: var(--md-sys-color-on-surface);
   font-size: 12px;
   font-weight: 700;
+}
+
+.foundation-code-card {
+  margin-top: 0;
 }
 
 .motion-trigger {
