@@ -147,6 +147,70 @@
 
     <section class="section">
       <div class="section-head">
+        <h2>Error Display · 不撑高布局</h2>
+        <p>错误状态与错误文案展示方式分离。M3 默认错误文案悬浮在字段下方；紧凑模式只显示 error 高亮与 !。</p>
+      </div>
+
+      <article class="demo-card">
+        <div class="demo-titlebar">
+          <strong>M3 · message vs icon</strong>
+          <code>errorDisplay</code>
+        </div>
+        <div class="demo-stage">
+          <div class="grid-2 gap-nm error-display-demo">
+            <div>
+              <div class="demo-label">message · 默认</div>
+              <SjfInput
+                model-value="138"
+                label="联系电话"
+                error
+                helper="联系电话格式不正确"
+              />
+            </div>
+
+            <div>
+              <div class="demo-label">icon · hover !</div>
+              <SjfInput
+                model-value="BAD-001"
+                label="工号"
+                error
+                helper="工号必须符合 SJF-000000 格式"
+                error-display="icon"
+              />
+            </div>
+          </div>
+
+          <div class="error-layout-baseline">
+            这条基准线用于观察布局：message 模式的错误文案不参与高度计算，不会把整行往下撑。
+          </div>
+        </div>
+      </article>
+
+      <div class="code-card">
+        <pre><code>&lt;!-- 默认：M3 错误文案悬浮，不占布局高度 --&gt;
+&lt;SjfInput
+  label="联系电话"
+  error
+  helper="联系电话格式不正确"
+/&gt;
+
+&lt;!-- 紧凑：只高亮错误 + !，hover/focus 看文案 --&gt;
+&lt;SjfInput
+  label="工号"
+  error
+  helper="工号格式不正确"
+  error-display="icon"
+/&gt;
+
+&lt;!-- Form 统一默认 --&gt;
+&lt;SjfForm error-display="icon"&gt;
+  ...
+&lt;/SjfForm&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
         <h2>同一个 Input · 切 Label Mode</h2>
         <p>Input 本身不实现五套 Label 布局，切换只来自 Form / Label Context。</p>
       </div>
@@ -218,6 +282,7 @@
             <tr><td><code>size</code></td><td>SjfSize</td><td>组件尺寸，未传时继承全局</td></tr>
             <tr><td><code>colSpan / rowSpan</code></td><td>number</td><td>Form Control Cell 跨列 / 跨行</td></tr>
             <tr><td><code>labelAlign / contentAlign</code></td><td>left | center | right</td><td>Label / 输入内容对齐</td></tr>
+            <tr><td><code>errorDisplay</code></td><td>message | icon</td><td>错误文案悬浮展示或 ! Tooltip 紧凑模式</td></tr>
             <tr><td><code>clearable</code></td><td>boolean</td><td>显示清空动作</td></tr>
             <tr><td><code>showPassword</code></td><td>boolean</td><td>password / text 可见性切换</td></tr>
             <tr><td><code>showCount</code></td><td>boolean</td><td>显示字符数量</td></tr>
@@ -292,5 +357,18 @@ const form = reactive({
   border-color: var(--md-sys-color-primary);
   color: var(--md-sys-color-primary);
   background: var(--md-sys-color-primary-container);
+}
+
+.error-display-demo {
+  align-items: start;
+  padding-bottom: 20px;
+}
+
+.error-layout-baseline {
+  margin-top: 18px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--md-sys-color-outline-variant);
+  color: var(--md-sys-color-on-surface-variant);
+  font-size: 12px;
 }
 </style>
