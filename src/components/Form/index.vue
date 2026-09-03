@@ -7,6 +7,7 @@
     :data-label-mode="resolvedLabelOption.mode ?? 'm3'"
     :data-label-align="resolvedLabelOption.align ?? 'left'"
     :data-content-align="resolvedContentAlign"
+    :data-error-display="resolvedLabelOption.errorDisplay ?? 'message'"
   >
     <slot />
   </div>
@@ -29,6 +30,7 @@ const resolvedLabelOption = computed(() => ({
   ...(props.labelOption ?? {}),
   ...(props.labelMode !== undefined ? { mode: props.labelMode } : {}),
   ...(props.labelAlign !== undefined ? { align: props.labelAlign } : {}),
+  ...(props.errorDisplay !== undefined ? { errorDisplay: props.errorDisplay } : {}),
   ...(props.size !== undefined && props.labelOption?.size === undefined ? { size: props.size } : {}),
 }))
 
