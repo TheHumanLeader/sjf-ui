@@ -118,7 +118,11 @@
 
             <div>
               <div class="demo-label">SjfInput · forwarded label slot</div>
-              <SjfInput model-value="研发中心" label-option="" label-align="left">
+              <SjfInput
+                model-value="研发中心"
+                :label-option="{ mode: 'horizontal' }"
+                label-align="left"
+              >
                 <template #label>
                   <SjfLabelContent title="所属部门" subtitle="当前组织归属">
                     <template #icon>
