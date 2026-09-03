@@ -5,6 +5,8 @@
     :style="formStyle"
     :data-columns="resolvedColumns"
     :data-label-mode="resolvedLabelOption.mode ?? 'm3'"
+    :data-label-align="resolvedLabelOption.align ?? 'left'"
+    :data-content-align="resolvedContentAlign"
   >
     <slot />
   </div>
@@ -21,10 +23,12 @@ const props = defineProps<SjfFormProps>()
 const globalBaseSize = useSjfBaseSize()
 const resolvedColumns = computed(() => Math.max(1, Math.floor(props.columns ?? 1)))
 const effectiveSize = computed(() => props.size ?? globalBaseSize.value)
+const resolvedContentAlign = computed(() => props.contentAlign ?? 'left')
 
 const resolvedLabelOption = computed(() => ({
   ...(props.labelOption ?? {}),
   ...(props.labelMode !== undefined ? { mode: props.labelMode } : {}),
+  ...(props.labelAlign !== undefined ? { align: props.labelAlign } : {}),
   ...(props.size !== undefined && props.labelOption?.size === undefined ? { size: props.size } : {}),
 }))
 
@@ -61,6 +65,7 @@ provide(SJF_FORM_CONTEXT_KEY, {
   columns: resolvedColumns,
   size: computed(() => props.size),
   labelOption: resolvedLabelOption,
+  contentAlign: resolvedContentAlign,
   boxGroup,
 })
 </script>
@@ -75,11 +80,6 @@ provide(SJF_FORM_CONTEXT_KEY, {
   gap: var(--sjf-form-gap);
 }
 
-/*
- * horizontal-box uses a true single-line grid instead of a 1px colored gap.
- * Every cell draws only its right/bottom edge; the form pseudo-element draws
- * the outer frame. Adjacent cells therefore never stack two borders.
- */
 .sjf-form.is-box-group[data-label-mode='horizontal-box'] {
   position: relative;
   overflow: hidden;
@@ -107,8 +107,6 @@ provide(SJF_FORM_CONTEXT_KEY, {
   border-radius: 0;
 }
 
-/* Keep the current gap-as-line implementation for vertical-box until its
- * cells are promoted to the same split-grid model. */
 .sjf-form.is-box-group:not([data-label-mode='horizontal-box']) {
   overflow: hidden;
   border: var(--sjf-form-line-width) solid var(--md-sys-color-outline-variant, #cac4d0);
