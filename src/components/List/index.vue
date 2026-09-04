@@ -105,7 +105,6 @@ import {
   nextTick,
   onBeforeUnmount,
   onMounted,
-  onUpdated,
   provide,
   ref,
   shallowRef,
@@ -231,12 +230,16 @@ function updateActiveIndicator(): void {
     ? 'var(--sjf-rd-sm, 6px)'
     : getComputedStyle(item).borderRadius
 
-  activeIndicatorStyle.value = {
+  const nextStyle = {
     '--sjf-list-active-x': `${x}px`,
     '--sjf-list-active-y': `${y}px`,
     '--sjf-list-active-width': `${itemRect.width}px`,
     '--sjf-list-active-height': `${itemRect.height}px`,
     '--sjf-list-active-radius': radius || 'var(--sjf-rd-sm, 6px)',
+  }
+
+  if (!sameStyleRecord(activeIndicatorStyle.value, nextStyle)) {
+    activeIndicatorStyle.value = nextStyle
   }
   activeIndicatorVisible.value = true
 
@@ -249,6 +252,15 @@ function updateActiveIndicator(): void {
       activeIndicatorReady.value = true
     })
   }
+}
+
+function sameStyleRecord(
+  current: Record<string, string>,
+  next: Record<string, string>,
+): boolean {
+  const keys = Object.keys(next)
+  return keys.length === Object.keys(current).length
+    && keys.every((key) => current[key] === next[key])
 }
 
 function resetActiveIndicator(): void {
@@ -329,7 +341,29 @@ function handleWheel(event: WheelEvent): void {
   if (smoothScroll.moveBy(delta, scrollDuration('wheel'))) event.preventDefault()
 }
 
-watch(() => [props.horizontal, props.height], cancelScroll)
+watch(
+  () => [props.horizontal, props.height, props.multiple, effectiveSize.value],
+  () => {
+    cancelScroll()
+    void nextTick(updateLayoutState)
+  },
+)
+
+watch(
+  currentValue,
+  () => {
+    void nextTick(updateActiveIndicator)
+  },
+  { deep: true },
+)
+
+watch(
+  resolvedList,
+  () => {
+    void nextTick(updateLayoutState)
+  },
+  { deep: true },
+)
 
 function isActive(value: unknown): boolean {
   const current = currentValue.value
@@ -419,10 +453,6 @@ onMounted(() => {
       subtree: true,
     })
   }
-})
-
-onUpdated(() => {
-  void nextTick(updateLayoutState)
 })
 
 onBeforeUnmount(() => {
