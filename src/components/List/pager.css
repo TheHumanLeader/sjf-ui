@@ -1,0 +1,89 @@
+/*
+ * Page-scroll affordance.
+ *
+ * `height` defines the List viewport. Pagers float over the viewport edges so
+ * they do not consume a full row / column of layout space.
+ */
+.sjf-list-frame.sjf-list-frame.has-height {
+  position: relative;
+  display: block;
+  block-size: var(--sjf-list-height);
+  overflow: hidden;
+}
+
+.sjf-list-frame.has-height > .sjf-list {
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+.sjf-list-frame.has-height > .sjf-list__pager {
+  position: absolute;
+  z-index: 4;
+  inline-size: 28px;
+  block-size: 28px;
+  min-inline-size: 28px;
+  min-block-size: 28px;
+  border-radius: 999px;
+  color: var(--md-sys-color-on-surface-variant);
+  background: color-mix(
+    in srgb,
+    var(--md-sys-color-surface-container-high, var(--md-sys-color-surface-container)) 88%,
+    transparent
+  );
+  box-shadow: var(--sjf-shadow-sm, 0 1px 3px rgb(0 0 0 / 0.12));
+  backdrop-filter: blur(8px);
+  opacity: 0.94;
+}
+
+.sjf-list-frame.has-height.is-vertical > .sjf-list__pager {
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+}
+
+.sjf-list-frame.has-height.is-vertical > .sjf-list__pager.is-previous {
+  inset-block-start: 6px;
+}
+
+.sjf-list-frame.has-height.is-vertical > .sjf-list__pager.is-next {
+  inset-block-end: 6px;
+}
+
+.sjf-list-frame.has-height.is-horizontal > .sjf-list__pager {
+  inset-block-start: 50%;
+  transform: translateY(-50%);
+}
+
+.sjf-list-frame.has-height.is-horizontal > .sjf-list__pager.is-previous {
+  inset-inline-start: 6px;
+}
+
+.sjf-list-frame.has-height.is-horizontal > .sjf-list__pager.is-next {
+  inset-inline-end: 6px;
+}
+
+/* Do not show a useless disabled bar at an edge. */
+.sjf-list-frame.has-height > .sjf-list__pager:disabled {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.sjf-list-frame.has-height > .sjf-list__pager:hover:not(:disabled),
+.sjf-list-frame.has-height > .sjf-list__pager:focus-visible {
+  opacity: 1;
+  color: var(--sjf-list-active-color, var(--md-sys-color-primary));
+  background: var(--md-sys-color-surface-container-highest);
+}
+
+/* Keep horizontal content clear of the floating edge controls. */
+.sjf-list-frame.has-height.is-horizontal > .sjf-list {
+  box-sizing: border-box;
+  padding-inline: 38px;
+  scroll-padding-inline: 38px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sjf-list-frame.has-height > .sjf-list__pager {
+    backdrop-filter: none;
+  }
+}
