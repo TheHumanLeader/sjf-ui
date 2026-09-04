@@ -29,6 +29,50 @@
 - 字段映射接受 key、点路径或 resolver function。
 - `type` 支持 `list`、`menu`、`tree`、`tabs`，并自动生成正确的 ARIA role。
 
+## Active Motion
+
+List 的 active 动画按选择模型分成两套机制，不允许单选和多选共用同一种背景色切换。
+
+### Single select
+
+单选时 List 内部只有一个共享的 active indicator：
+
+```text
+Item A [ active ]
+       ↓
+       ↓  indicator slide
+       ↓
+Item B [ active ]
+```
+
+- active 背景属于 List，不属于单个 Item。
+- 切换选择时，indicator 从旧 Item 的位置平滑滑动到新 Item。
+- 同时插值宽、高和圆角，用于 title / subtitle 高度不同的 Item。
+- 竖向 List 与横向 Tabs 使用同一套滑动逻辑。
+- indicator 位于滚动内容内部，因此列表滚动时自然跟随内容，不需要逐帧重新测量。
+- 第一次出现 active 时原地淡入，不从 `(0, 0)` 飞入。
+
+### Multiple select
+
+多选时不存在共享 indicator，每个 active Item 独立从中心向外填充：
+
+```text
+       ·
+      ╱ ╲
+     ╱   ╲
+┌────────────┐
+│   active   │
+└────────────┘
+```
+
+- `transform-origin: center`。
+- 选中：中心小块向四周扩展到完整 Item。
+- 取消：反向向中心收回。
+- 进入使用 Motion `enter`，退出使用 Motion `leave`。
+- 文本 / icon 始终位于填充层上方。
+
+系统启用 `prefers-reduced-motion: reduce` 时，两类 active 动画都会自动缩短到近乎即时。
+
 ## Composition
 
 ```vue

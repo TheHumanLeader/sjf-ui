@@ -44,6 +44,17 @@
       @touchstart.passive="cancelScroll"
       @keydown="cancelScroll"
     >
+      <div
+        v-if="!props.multiple"
+        class="sjf-list__active-indicator"
+        :class="{
+          'is-visible': activeIndicatorVisible,
+          'is-ready': activeIndicatorReady,
+        }"
+        :style="activeIndicatorStyle"
+        aria-hidden="true"
+      ></div>
+
       <slot v-if="slots.default" />
 
       <template v-else>
@@ -141,6 +152,11 @@ const uncontrolledValue = shallowRef<SjfListModelValue>(props.multiple ? [] : nu
 const listViewport = ref<HTMLElement | null>(null)
 const canPageBackward = ref(false)
 const canPageForward = ref(false)
+const activeIndicatorVisible = ref(false)
+const activeIndicatorReady = ref(false)
+const activeIndicatorStyle = shallowRef<Record<string, string>>({})
+let activeIndicatorWasPositioned = false
+let activeIndicatorReadyFrame: number | undefined
 let resizeObserver: ResizeObserver | undefined
 let mutationObserver: MutationObserver | undefined
 
@@ -192,6 +208,62 @@ function updatePagingState(): void {
 
   canPageBackward.value = position > 1
   canPageForward.value = position + viewportSize < scrollSize - 1
+}
+
+function updateActiveIndicator(): void {
+  const viewport = listViewport.value
+  if (!viewport || props.multiple) {
+    resetActiveIndicator()
+    return
+  }
+
+  const item = viewport.querySelector<HTMLElement>('.sjf-item[data-active="true"]')
+  if (!item) {
+    resetActiveIndicator()
+    return
+  }
+
+  const viewportRect = viewport.getBoundingClientRect()
+  const itemRect = item.getBoundingClientRect()
+  const x = itemRect.left - viewportRect.left + viewport.scrollLeft
+  const y = itemRect.top - viewportRect.top + viewport.scrollTop
+  const radius = typeof getComputedStyle === 'undefined'
+    ? 'var(--sjf-rd-sm, 6px)'
+    : getComputedStyle(item).borderRadius
+
+  activeIndicatorStyle.value = {
+    '--sjf-list-active-x': `${x}px`,
+    '--sjf-list-active-y': `${y}px`,
+    '--sjf-list-active-width': `${itemRect.width}px`,
+    '--sjf-list-active-height': `${itemRect.height}px`,
+    '--sjf-list-active-radius': radius || 'var(--sjf-rd-sm, 6px)',
+  }
+  activeIndicatorVisible.value = true
+
+  if (!activeIndicatorWasPositioned) {
+    activeIndicatorWasPositioned = true
+    activeIndicatorReady.value = false
+    if (activeIndicatorReadyFrame !== undefined) cancelAnimationFrame(activeIndicatorReadyFrame)
+    activeIndicatorReadyFrame = requestAnimationFrame(() => {
+      activeIndicatorReadyFrame = undefined
+      activeIndicatorReady.value = true
+    })
+  }
+}
+
+function resetActiveIndicator(): void {
+  activeIndicatorVisible.value = false
+  activeIndicatorReady.value = false
+  activeIndicatorWasPositioned = false
+  if (activeIndicatorReadyFrame !== undefined) {
+    cancelAnimationFrame(activeIndicatorReadyFrame)
+    activeIndicatorReadyFrame = undefined
+  }
+}
+
+function updateLayoutState(): void {
+  updatePagingState()
+  updateActiveIndicator()
 }
 
 function scrollPage(direction: -1 | 1): void {
@@ -330,16 +402,18 @@ provide(SJF_LIST_CONTEXT_KEY, {
 })
 
 onMounted(() => {
-  void nextTick(updatePagingState)
+  void nextTick(updateLayoutState)
 
   if (listViewport.value && typeof ResizeObserver !== 'undefined') {
-    resizeObserver = new ResizeObserver(updatePagingState)
+    resizeObserver = new ResizeObserver(updateLayoutState)
     resizeObserver.observe(listViewport.value)
   }
 
   if (listViewport.value && typeof MutationObserver !== 'undefined') {
-    mutationObserver = new MutationObserver(updatePagingState)
+    mutationObserver = new MutationObserver(updateLayoutState)
     mutationObserver.observe(listViewport.value, {
+      attributes: true,
+      attributeFilter: ['data-active'],
       childList: true,
       characterData: true,
       subtree: true,
@@ -348,11 +422,12 @@ onMounted(() => {
 })
 
 onUpdated(() => {
-  void nextTick(updatePagingState)
+  void nextTick(updateLayoutState)
 })
 
 onBeforeUnmount(() => {
   cancelScroll()
+  resetActiveIndicator()
   resizeObserver?.disconnect()
   mutationObserver?.disconnect()
 })
@@ -383,11 +458,98 @@ onBeforeUnmount(() => {
 .sjf-list {
   --sjf-item-inline-size: 100%;
 
+  position: relative;
   min-width: 0;
   display: grid;
   align-content: start;
   gap: 2px;
   color: var(--md-sys-color-on-surface);
+}
+
+.sjf-list :deep(.sjf-item) {
+  position: relative;
+  z-index: 1;
+}
+
+.sjf-list__active-indicator {
+  position: absolute;
+  inset: 0 auto auto 0;
+  z-index: 0;
+  width: var(--sjf-list-active-width, 0px);
+  height: var(--sjf-list-active-height, 0px);
+  border-radius: var(--sjf-list-active-radius, var(--sjf-rd-sm, 6px));
+  background: color-mix(
+    in srgb,
+    var(--sjf-list-active-color, var(--md-sys-color-primary)) 14%,
+    transparent
+  );
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(
+    var(--sjf-list-active-x, 0px),
+    var(--sjf-list-active-y, 0px),
+    0
+  );
+  transition: opacity var(--sjf-motion-fast, 120ms) var(--sjf-motion-ease-standard, ease);
+}
+
+.sjf-list__active-indicator.is-visible {
+  opacity: 1;
+}
+
+.sjf-list__active-indicator.is-ready {
+  transition:
+    transform var(--sjf-motion-slow, 260ms) var(--sjf-motion-ease-standard, ease),
+    width var(--sjf-motion-normal, 180ms) var(--sjf-motion-ease-standard, ease),
+    height var(--sjf-motion-normal, 180ms) var(--sjf-motion-ease-standard, ease),
+    border-radius var(--sjf-motion-normal, 180ms) var(--sjf-motion-ease-standard, ease),
+    opacity var(--sjf-motion-fast, 120ms) var(--sjf-motion-ease-standard, ease);
+}
+
+.sjf-list:not(.is-multiple) :deep(.sjf-item.is-active) {
+  background: transparent;
+}
+
+.sjf-list.is-multiple :deep(.sjf-item) {
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.sjf-list.is-multiple :deep(.sjf-item)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: color-mix(
+    in srgb,
+    var(--sjf-list-active-color, var(--md-sys-color-primary)) 14%,
+    transparent
+  );
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.08);
+  transform-origin: center;
+  transition:
+    transform var(--sjf-motion-leave, 160ms) var(--sjf-motion-ease-leave, ease),
+    opacity var(--sjf-motion-leave, 160ms) var(--sjf-motion-ease-leave, ease);
+}
+
+.sjf-list.is-multiple :deep(.sjf-item > *) {
+  position: relative;
+  z-index: 1;
+}
+
+.sjf-list.is-multiple :deep(.sjf-item.is-active) {
+  background: transparent;
+}
+
+.sjf-list.is-multiple :deep(.sjf-item.is-active)::before {
+  opacity: 1;
+  transform: scale(1);
+  transition:
+    transform var(--sjf-motion-enter, 220ms) var(--sjf-motion-ease-enter, ease),
+    opacity var(--sjf-motion-enter, 220ms) var(--sjf-motion-ease-enter, ease);
 }
 
 .sjf-list.is-bounded {
