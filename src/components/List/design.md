@@ -31,40 +31,37 @@
 
 ## Active Motion
 
-List 的 active 动画由“当前 active 数量”与选择模型共同决定，不把 `multiple` 本身等同于“必须使用多选填充动画”。
+单选与 Multiple Active 保持各自的状态模型，但共享同一种“出现 / 消失”动效语言。
 
 ### Single select
 
 单选时 List 内部只有一个共享的 active indicator：
 
 ```text
+0 active
+   ↓ center-out enter
 Item A [ active ]
        ↓
        ↓  indicator slide
        ↓
 Item B [ active ]
+   ↓ center-in leave
+0 active
 ```
 
+- `0 → 1`：共享 indicator 在目标 Item 原地从中心向外扩充满。
+- `A → B`：indicator 保持完整高亮块，在旧 Item 与新 Item 之间平滑滑动。
+- `1 → 0`：indicator 在最后位置向中心收回。
 - active 背景属于 List，不属于单个 Item。
-- 切换选择时，indicator 从旧 Item 的位置平滑滑动到新 Item。
-- 同时插值宽、高和圆角，用于 title / subtitle 高度不同的 Item。
+- 滑动时同时插值宽、高和圆角，用于 title / subtitle 高度不同的 Item。
 - 竖向 List 与横向 Tabs 使用同一套滑动逻辑。
 - indicator 位于滚动内容内部，因此列表滚动时自然跟随内容，不需要逐帧重新测量。
-- 第一次出现 active 时原地淡入，不从 `(0, 0)` 飞入。
 
-### Multiple select
+### Multiple Active
 
-多选能力存在时，只有真正同时出现多个 active Item 才进入中心向外填充模式。
+Multiple Active 保持原来的 Item 级独立填充逻辑，不由 active 数量选择器或共享 indicator 接管。
 
-当当前只有 **1 个 active** 时：
-
-```text
-0 active → 1 active
-```
-
-视觉沿用单选的“第一次 active”动画：高亮直接在目标 Item 原地淡入，不做中心扩散。这样“允许多选”不会强迫单个选中项使用多选动画。
-
-当 active 数量进入 **2 个及以上** 时，每个 active Item 独立从中心向外填充：
+每个 Item 被选中时，从中心向外填充：
 
 ```text
        ·
@@ -76,10 +73,10 @@ Item B [ active ]
 ```
 
 - `transform-origin: center`。
-- 第一个 active：按单选首次 active 的淡入方式出现。
-- 第二个及后续 active：中心小块向四周扩展到完整 Item。
+- 选中：中心小块向四周扩展到完整 Item。
 - 取消：反向向中心收回。
 - 进入使用 Motion `enter`，退出使用 Motion `leave`。
+- 每个 active Item 独立运行，不使用单选的共享 indicator。
 - 文本 / icon 始终位于填充层上方。
 
 系统启用 `prefers-reduced-motion: reduce` 时，两类 active 动画都会自动缩短到近乎即时。

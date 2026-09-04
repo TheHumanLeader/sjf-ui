@@ -1,48 +1,26 @@
 /*
- * Active motion is driven by the number of active items currently rendered,
- * not merely by the `multiple` capability flag.
+ * List active motion extension.
  *
- * 0 active  -> no highlight
- * 1 active  -> single-select style appearance
- * 2+ active -> each active item fills from the center outward
+ * Multiple Active keeps the original Item-level center-out fill implemented in
+ * List/index.vue. This file only gives the single-select shared indicator the
+ * same enter / leave language when the active highlight appears or disappears.
+ *
+ * Single-select lifecycle:
+ *   0 -> 1 : fill from center outward
+ *   A -> B : shared indicator slides between items
+ *   1 -> 0 : collapse from outside back to center
  */
 
-/*
- * Multiple-capable List with exactly one active item.
- * Keep the pseudo fill at full size and only fade it in, matching the
- * single-select first-active appearance instead of center-out expansion.
- */
-.sjf-list.sjf-list.is-multiple:has(.sjf-item[data-active='true']):not(
-    :has(.sjf-item[data-active='true'] ~ .sjf-item[data-active='true'])
-  )
-  .sjf-item.sjf-item.is-active::before {
+.sjf-list.sjf-list:not(.is-multiple) > .sjf-list__active-indicator {
+  /* The outer indicator owns geometry and sliding only. */
+  background: transparent;
   opacity: 1;
-  transform: scale(1);
-  transition: opacity var(--sjf-motion-fast, 120ms)
-    var(--sjf-motion-ease-standard, ease);
 }
 
-/*
- * Two or more active items means the List is visually in multi-active mode,
- * even when active states come from composed SJFItem props rather than the
- * List `multiple` model.
- */
-.sjf-list.sjf-list:has(
-    .sjf-item[data-active='true'] ~ .sjf-item[data-active='true']
-  )
-  .sjf-item.sjf-item {
-  overflow: hidden;
-  isolation: isolate;
-}
-
-.sjf-list.sjf-list:has(
-    .sjf-item[data-active='true'] ~ .sjf-item[data-active='true']
-  )
-  .sjf-item.sjf-item::before {
+.sjf-list.sjf-list:not(.is-multiple) > .sjf-list__active-indicator::before {
   content: '';
   position: absolute;
   inset: 0;
-  z-index: 0;
   border-radius: inherit;
   background: color-mix(
     in srgb,
@@ -58,54 +36,17 @@
     opacity var(--sjf-motion-leave, 160ms) var(--sjf-motion-ease-leave, ease);
 }
 
-.sjf-list.sjf-list:has(
-    .sjf-item[data-active='true'] ~ .sjf-item[data-active='true']
-  )
-  .sjf-item.sjf-item > * {
-  position: relative;
-  z-index: 1;
-}
-
-.sjf-list.sjf-list:has(
-    .sjf-item[data-active='true'] ~ .sjf-item[data-active='true']
-  )
-  .sjf-item.sjf-item.is-active {
-  background: transparent;
-}
-
-.sjf-list.sjf-list:has(
-    .sjf-item[data-active='true'] ~ .sjf-item[data-active='true']
-  )
-  .sjf-item.sjf-item.is-active::before {
+.sjf-list.sjf-list:not(.is-multiple)
+  > .sjf-list__active-indicator.is-visible::before {
   opacity: 1;
   transform: scale(1);
-  animation: sjf-list-active-fill-in var(--sjf-motion-enter, 220ms)
-    var(--sjf-motion-ease-enter, ease) both;
-}
-
-/* A non-multiple composed List can still contain 2+ independently active Items. */
-.sjf-list.sjf-list:has(
-    .sjf-item[data-active='true'] ~ .sjf-item[data-active='true']
-  )
-  > .sjf-list__active-indicator {
-  opacity: 0 !important;
-}
-
-@keyframes sjf-list-active-fill-in {
-  from {
-    opacity: 0;
-    transform: scale(0.08);
-  }
-
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+  transition:
+    transform var(--sjf-motion-enter, 220ms) var(--sjf-motion-ease-enter, ease),
+    opacity var(--sjf-motion-enter, 220ms) var(--sjf-motion-ease-enter, ease);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .sjf-list.sjf-list .sjf-item.sjf-item::before {
-    animation-duration: 1ms !important;
+  .sjf-list.sjf-list:not(.is-multiple) > .sjf-list__active-indicator::before {
     transition-duration: 1ms !important;
   }
 }
