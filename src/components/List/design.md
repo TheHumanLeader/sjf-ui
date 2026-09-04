@@ -31,7 +31,7 @@
 
 ## Active Motion
 
-List 的 active 动画按选择模型分成两套机制，不允许单选和多选共用同一种背景色切换。
+List 的 active 动画由“当前 active 数量”与选择模型共同决定，不把 `multiple` 本身等同于“必须使用多选填充动画”。
 
 ### Single select
 
@@ -54,7 +54,17 @@ Item B [ active ]
 
 ### Multiple select
 
-多选时不存在共享 indicator，每个 active Item 独立从中心向外填充：
+多选能力存在时，只有真正同时出现多个 active Item 才进入中心向外填充模式。
+
+当当前只有 **1 个 active** 时：
+
+```text
+0 active → 1 active
+```
+
+视觉沿用单选的“第一次 active”动画：高亮直接在目标 Item 原地淡入，不做中心扩散。这样“允许多选”不会强迫单个选中项使用多选动画。
+
+当 active 数量进入 **2 个及以上** 时，每个 active Item 独立从中心向外填充：
 
 ```text
        ·
@@ -66,7 +76,8 @@ Item B [ active ]
 ```
 
 - `transform-origin: center`。
-- 选中：中心小块向四周扩展到完整 Item。
+- 第一个 active：按单选首次 active 的淡入方式出现。
+- 第二个及后续 active：中心小块向四周扩展到完整 Item。
 - 取消：反向向中心收回。
 - 进入使用 Motion `enter`，退出使用 Motion `leave`。
 - 文本 / icon 始终位于填充层上方。

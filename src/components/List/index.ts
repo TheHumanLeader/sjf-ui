@@ -1,3 +1,4 @@
+import './motion.css'
 import type { SjfSize } from '../../core/size'
 
 export const SJF_LIST_TYPES = ['list', 'menu', 'tree', 'tabs'] as const
