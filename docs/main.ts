@@ -6,6 +6,7 @@ import '@/styles/index.css'
 import './styles.css'
 import './theme.css'
 import './component-demo.css'
+import './list-demo.css'
 
 SJFUI.setTheme(readStoredSjfTheme())
 

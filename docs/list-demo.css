@@ -1,0 +1,15 @@
+/* List documentation-only presentation fixes. */
+
+/*
+ * In the Height · Page Scroll demo, the visible body should map 1:1 to the
+ * component `height` prop. The global docs `.demo-stage` normally adds 30px
+ * padding on every side, which makes a 64px List look ~124px tall and obscures
+ * the actual component geometry.
+ */
+.height-demo-grid .demo-stage {
+  padding: 0;
+}
+
+.height-demo-grid .demo-stage > .sjf-list-frame {
+  inline-size: 100%;
+}
