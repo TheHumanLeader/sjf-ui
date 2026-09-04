@@ -12,6 +12,7 @@ export interface SjfSizeDomains {
   radius: string
   shadow: string
   controlHeight: string
+  icon: string
   fontSize: string
   labelWidth: string
   lineWidth: string
@@ -36,27 +37,27 @@ export interface RegisterSizeOptions {
 const DEFAULT_DOMAINS: Record<SjfBuiltinSize, SjfSizeDomains> = {
   mn: {
     padding: '4px', margin: '4px', gap: '4px', radius: '4px',
-    shadow: '0 1px 2px rgb(0 0 0 / 0.10)', controlHeight: '28px',
+    shadow: '0 1px 2px rgb(0 0 0 / 0.10)', controlHeight: '28px', icon: '18px',
     fontSize: '11px', labelWidth: '72px', lineWidth: '1px',
   },
   sm: {
     padding: '8px', margin: '8px', gap: '8px', radius: '6px',
-    shadow: '0 1px 3px rgb(0 0 0 / 0.12)', controlHeight: '32px',
+    shadow: '0 1px 3px rgb(0 0 0 / 0.12)', controlHeight: '32px', icon: '20px',
     fontSize: '12px', labelWidth: '84px', lineWidth: '1px',
   },
   nm: {
     padding: '12px', margin: '12px', gap: '12px', radius: '8px',
-    shadow: '0 2px 6px rgb(0 0 0 / 0.12)', controlHeight: '40px',
+    shadow: '0 2px 6px rgb(0 0 0 / 0.12)', controlHeight: '40px', icon: '24px',
     fontSize: '14px', labelWidth: '96px', lineWidth: '1px',
   },
   md: {
     padding: '16px', margin: '16px', gap: '16px', radius: '12px',
-    shadow: '0 3px 10px rgb(0 0 0 / 0.14)', controlHeight: '48px',
+    shadow: '0 3px 10px rgb(0 0 0 / 0.14)', controlHeight: '48px', icon: '28px',
     fontSize: '15px', labelWidth: '112px', lineWidth: '2px',
   },
   lg: {
     padding: '24px', margin: '24px', gap: '24px', radius: '16px',
-    shadow: '0 6px 18px rgb(0 0 0 / 0.16)', controlHeight: '56px',
+    shadow: '0 6px 18px rgb(0 0 0 / 0.16)', controlHeight: '56px', icon: '32px',
     fontSize: '16px', labelWidth: '132px', lineWidth: '2px',
   },
 }
@@ -68,6 +69,7 @@ const CSS_DOMAIN_NAMES: Record<SjfSizeDomain, string> = {
   radius: 'rd',
   shadow: 'shadow',
   controlHeight: 'control-h',
+  icon: 'icon',
   fontSize: 'font',
   labelWidth: 'label-w',
   lineWidth: 'line',
@@ -225,6 +227,7 @@ function buildUtilityRules(size: SjfSize): string {
 .rd-${size},.sjf-rd-${size}{border-radius:var(--sjf-rd-${size})}
 .shadow-${size},.sjf-shadow-${size}{box-shadow:var(--sjf-shadow-${size})}
 .control-h-${size},.sjf-control-h-${size}{min-height:var(--sjf-control-h-${size})}
+.icon-${size},.sjf-icon-${size}{font-size:var(--sjf-icon-${size})}
 `
 }
 

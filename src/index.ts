@@ -12,6 +12,24 @@ export * from './components/Input'
 export { default as SjfLabel } from './components/Label/index.vue'
 export * from './components/Label'
 
+export {
+  default as SjfIcon,
+  default as SJFIcon,
+} from './components/Icon/index.vue'
+export * from './components/Icon'
+
+export {
+  default as SjfList,
+  default as SJFList,
+} from './components/List/index.vue'
+export * from './components/List'
+
+export {
+  default as SjfItem,
+  default as SJFItem,
+} from './components/Item/index.vue'
+export * from './components/Item'
+
 export { default as vSjfOverlayAnchor } from './directives/overlayAnchor'
 export * from './directives/overlayAnchor'
 

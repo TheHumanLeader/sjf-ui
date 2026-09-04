@@ -71,6 +71,8 @@
     <main class="docs-main">
       <HomePage v-if="route === '/'" />
       <FoundationsPage v-else-if="route === '/foundations'" />
+      <IconPage v-else-if="route === '/components/icon'" />
+      <ListPage v-else-if="route === '/components/list'" />
       <LabelPage v-else-if="route === '/components/label'" />
       <FormPage v-else-if="route === '/components/form'" />
       <InputPage v-else-if="route === '/components/input'" />
@@ -84,6 +86,8 @@ import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { readStoredSjfTheme, setSjfTheme, type SjfThemeName } from '@/core/theme'
 import HomePage from './pages/HomePage.vue'
 import FoundationsPage from './pages/FoundationsPage.vue'
+import IconPage from './pages/IconPage.vue'
+import ListPage from './pages/ListPage.vue'
 import LabelPage from './pages/LabelPage.vue'
 import FormPage from './pages/FormPage.vue'
 import InputPage from './pages/InputPage.vue'
@@ -106,6 +110,13 @@ const navigation: NavigationGroup[] = [
     items: [
       { label: 'SJF-UI', path: '/' },
       { label: '设计基础', path: '/foundations' },
+    ],
+  },
+  {
+    title: '通用组件',
+    items: [
+      { label: 'Icon 图标', path: '/components/icon', badge: 'NEW' },
+      { label: 'List 列表', path: '/components/list', badge: 'NEW' },
     ],
   },
   {

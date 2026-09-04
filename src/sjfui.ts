@@ -1,4 +1,7 @@
 import type { App, Plugin } from 'vue'
+import SjfIcon from './components/Icon/index.vue'
+import SjfItem from './components/Item/index.vue'
+import SjfList from './components/List/index.vue'
 import { configureSjfUI, setSjfDefaultSize, type SjfUIConfig } from './core/config'
 import { registerSjfSize, type RegisterSizeOptions, type SjfSize } from './core/size'
 import { setSjfTheme, type SjfThemeName } from './core/theme'
@@ -27,6 +30,9 @@ export type SjfUIApi = Plugin<[SjfUIConfig?]> & {
 
 export const SJFUI: SjfUIApi = {
   install(app: App, config?: SjfUIConfig) {
+    app.component('SJFIcon', SjfIcon)
+    app.component('SJFItem', SjfItem)
+    app.component('SJFList', SjfList)
     app.directive('sjf-overlay-anchor', vSjfOverlayAnchor)
     if (config) configureSjfUI(config)
   },
