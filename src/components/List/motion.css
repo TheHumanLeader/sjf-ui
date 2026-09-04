@@ -1,0 +1,19 @@
+/*
+ * Adaptive active motion for multi-select List.
+ *
+ * A multi-select List with exactly one active item visually behaves like the
+ * single-select "first active" state: the highlight appears in place with a
+ * short fade instead of expanding from the center. As soon as a second active
+ * item exists, the normal multi-select center-out fill takes over.
+ *
+ * Keep this selector intentionally more specific than the scoped List styles
+ * because this file is imported by the List runtime module.
+ */
+.sjf-list.sjf-list.is-multiple
+  :has(.sjf-item[data-active='true'])
+  :not(:has(.sjf-item[data-active='true'] ~ .sjf-item[data-active='true']))
+  .sjf-item.sjf-item.is-active::before {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity var(--sjf-motion-fast, 120ms) var(--sjf-motion-ease-standard, ease);
+}
