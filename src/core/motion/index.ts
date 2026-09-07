@@ -17,6 +17,16 @@ export const SJF_MOTION_EASINGS = {
 
 export type SjfMotionEasing = keyof typeof SJF_MOTION_EASINGS
 
+export type SjfMotionPreference = 'system' | 'full' | 'reduced'
+export function setSjfMotion(preference: SjfMotionPreference): void {
+  if (typeof document !== 'undefined') document.documentElement.dataset.sjfMotion = preference
+}
+export function prefersSjfReducedMotion(): boolean {
+  if (typeof window === 'undefined') return false
+  const preference = document.documentElement.dataset.sjfMotion
+  return preference === 'reduced' || (preference !== 'full' && window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+}
+
 /**
  * Cheap/default transition properties used by SJF components.
  * Components may opt into a bounded layout animation when the interaction

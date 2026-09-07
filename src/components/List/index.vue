@@ -112,6 +112,7 @@ import {
   type CSSProperties,
 } from 'vue'
 import { useSjfBaseSize } from '../../core/size'
+import { prefersSjfReducedMotion } from '../../core/motion'
 import SJFIcon from '../Icon/index.vue'
 import SJFItem from '../Item/index.vue'
 import { SJF_LIST_CONTEXT_KEY } from './context'
@@ -319,7 +320,7 @@ function cancelScroll(): void {
 
 function scrollDuration(input: 'page' | 'wheel'): number {
   // Keep a short, functional transition in reduced-motion mode, without effects.
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const reduced = prefersSjfReducedMotion()
   return input === 'page' ? (reduced ? 180 : 320) : (reduced ? 120 : 160)
 }
 

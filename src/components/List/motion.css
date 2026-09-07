@@ -46,7 +46,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .sjf-list.sjf-list:not(.is-multiple) > .sjf-list__active-indicator::before {
+  :root:not([data-sjf-motion='full']) .sjf-list.sjf-list:not(.is-multiple) > .sjf-list__active-indicator::before {
     transition-duration: 1ms !important;
   }
 }

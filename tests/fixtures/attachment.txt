@@ -1,0 +1,1 @@
+SJF-UI local file-selection fixture. This file contains no private information.

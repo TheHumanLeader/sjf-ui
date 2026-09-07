@@ -1,7 +1,6 @@
 import type { App, Plugin } from 'vue'
-import SjfIcon from './components/Icon/index.vue'
-import SjfItem from './components/Item/index.vue'
-import SjfList from './components/List/index.vue'
+import { setSjfMotion, type SjfMotionPreference } from './core/motion'
+import { sjfComponents } from './components/registry'
 import { configureSjfUI, setSjfDefaultSize, type SjfUIConfig } from './core/config'
 import { registerSjfSize, type RegisterSizeOptions, type SjfSize } from './core/size'
 import { setSjfTheme, type SjfThemeName } from './core/theme'
@@ -21,6 +20,7 @@ export type SjfUIApi = Plugin<[SjfUIConfig?]> & {
   setDefaultSize: (size: SjfSize) => void
   registerSize: (name: SjfSize, options: RegisterSizeOptions) => void
   setTheme: (theme: SjfThemeName) => void
+  setMotion: (preference: SjfMotionPreference) => void
   setOverlayMount: (resolver: SjfOverlayMountResolver) => void
   setOverlay: (options: Partial<SjfOverlayDefaults>) => void
   getOverlayMount: () => HTMLElement | null
@@ -30,9 +30,7 @@ export type SjfUIApi = Plugin<[SjfUIConfig?]> & {
 
 export const SJFUI: SjfUIApi = {
   install(app: App, config?: SjfUIConfig) {
-    app.component('SJFIcon', SjfIcon)
-    app.component('SJFItem', SjfItem)
-    app.component('SJFList', SjfList)
+    for (const [name, component] of Object.entries(sjfComponents)) app.component(name, component)
     app.directive('sjf-overlay-anchor', vSjfOverlayAnchor)
     if (config) configureSjfUI(config)
   },
@@ -41,6 +39,7 @@ export const SJFUI: SjfUIApi = {
   setDefaultSize: setSjfDefaultSize,
   registerSize: registerSjfSize,
   setTheme: setSjfTheme,
+  setMotion: setSjfMotion,
   setOverlayMount: setSjfOverlayMount,
   setOverlay: setSjfOverlayDefaults,
   getOverlayMount: resolveSjfOverlayMount,

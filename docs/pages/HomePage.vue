@@ -8,7 +8,7 @@
         默认遵循 Material 3，同时把信息密度、办公实用性和长期可维护性放在同等重要的位置。
       </p>
       <div class="hero-actions">
-        <a class="primary-action" href="#/components/label">查看第一个组件</a>
+        <a class="primary-action" href="#/components">浏览全部 42 个组件</a>
         <a class="secondary-action" href="#/foundations">阅读设计基础</a>
       </div>
     </section>
@@ -31,7 +31,7 @@
     <section class="section">
       <div class="section-head">
         <h2>当前进度</h2>
-        <p>我们按组件逐个推进，不先铺一堆半成品。</p>
+        <p>从基础控件到表单、导航、数据和反馈，全部组件都配有真实运行示例。</p>
       </div>
       <div class="grid-2">
         <article class="spec-card">
@@ -40,9 +40,9 @@
           <p>三套底层规范已经建立。Size 支持有序扩展；Theme 基于 M3；Form 取消 FormItem，输入组件直接内置通用 Label。</p>
         </article>
         <article class="spec-card">
-          <p class="page-kicker">COMPONENT 001</p>
-          <h3>Label</h3>
-          <p>支持 m3、horizontal、horizontal-box、vertical、vertical-box 五种模式，是后续所有输入类组件的统一标签布局基础。</p>
+          <p class="page-kicker">COMPONENT LIBRARY</p>
+          <h3>42 个组件 · 一套设计语言</h3>
+          <p>完整表单、单选滑动导航、数据表格以及模态反馈。组件总览可搜索用途，并直接进入交互示例。</p>
         </article>
       </div>
     </section>

@@ -11,7 +11,7 @@
 
       <nav class="top-nav" aria-label="顶部导航">
         <a :class="{ active: route === '/' }" href="#/">文档</a>
-        <a :class="{ active: route.startsWith('/components') }" href="#/components/label">组件</a>
+        <a :class="{ active: route.startsWith('/components') }" href="#/components">组件</a>
         <a :class="{ active: route.startsWith('/foundations') }" href="#/foundations">设计规范</a>
       </nav>
 
@@ -38,6 +38,8 @@
           {{ currentTheme === 'pink' ? '粉色' : '星空' }}
         </button>
 
+        <button class="theme-toggle docs-motion-toggle" type="button" aria-label="切换动画预览" @click="togglePreviewMotion">动画：{{ previewMotion === 'full' ? '完整' : previewMotion === 'system' ? '系统' : '减少' }}</button>
+        <a class="icon-link" href="#/components" aria-label="组件总览">42</a>
         <span class="version-chip">v0.1</span>
         <a
           class="icon-link"
@@ -70,12 +72,14 @@
 
     <main class="docs-main">
       <HomePage v-if="route === '/'" />
+      <ComponentsPage v-else-if="route === '/components'" />
       <FoundationsPage v-else-if="route === '/foundations'" />
       <IconPage v-else-if="route === '/components/icon'" />
       <ListPage v-else-if="route === '/components/list'" />
       <LabelPage v-else-if="route === '/components/label'" />
       <FormPage v-else-if="route === '/components/form'" />
       <InputPage v-else-if="route === '/components/input'" />
+      <ComponentPage v-else-if="componentEntry" :key="route" :entry="componentEntry" />
       <NotFoundPage v-else />
     </main>
   </div>
@@ -92,6 +96,10 @@ import LabelPage from './pages/LabelPage.vue'
 import FormPage from './pages/FormPage.vue'
 import InputPage from './pages/InputPage.vue'
 import NotFoundPage from './pages/NotFoundPage.vue'
+import ComponentPage from './pages/ComponentPage.vue'
+import ComponentsPage from './pages/ComponentsPage.vue'
+import { componentCatalog, componentGroups } from './catalog'
+import { readPreviewMotion, applyPreviewMotion } from './preview'
 
 interface NavigationItem {
   label: string
@@ -105,47 +113,18 @@ interface NavigationGroup {
 }
 
 const navigation: NavigationGroup[] = [
-  {
-    title: '开始',
-    items: [
-      { label: 'SJF-UI', path: '/' },
-      { label: '设计基础', path: '/foundations' },
-    ],
-  },
-  {
-    title: '通用组件',
-    items: [
-      { label: 'Icon 图标', path: '/components/icon', badge: 'NEW' },
-      { label: 'List 列表', path: '/components/list', badge: 'NEW' },
-    ],
-  },
-  {
-    title: '表单组件',
-    items: [
-      { label: 'Form 表单布局', path: '/components/form' },
-      { label: 'Label 标签布局', path: '/components/label' },
-      { label: 'Input 输入框', path: '/components/input', badge: 'NEW' },
-      { label: 'Select 选择器', path: '/components/select', badge: 'NEXT' },
-    ],
-  },
-  {
-    title: '数据展示',
-    items: [
-      { label: 'Descriptions 描述', path: '/components/descriptions' },
-      { label: 'Table 表格', path: '/components/table' },
-    ],
-  },
-  {
-    title: '反馈',
-    items: [
-      { label: 'Dialog 对话框', path: '/components/dialog' },
-      { label: 'Snackbar 消息', path: '/components/snackbar' },
-    ],
-  },
+  { title: '开始', items: [{label:'SJF-UI',path:'/'},{label:'组件总览 · 42',path:'/components'},{label:'设计基础',path:'/foundations'}] },
+  ...componentGroups,
 ]
 
 const route = ref(readRoute())
 const query = ref('')
+const componentEntry = computed(() => componentCatalog.find(c => c.path === route.value))
+const previewMotion = ref(readPreviewMotion())
+function togglePreviewMotion() {
+  previewMotion.value = previewMotion.value === 'full' ? 'system' : previewMotion.value === 'system' ? 'reduced' : 'full'
+  applyPreviewMotion(previewMotion.value)
+}
 const currentTheme = ref<SjfThemeName>(readStoredSjfTheme())
 
 const filteredNavigation = computed(() => {

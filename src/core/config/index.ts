@@ -1,5 +1,6 @@
 import { registerSjfSize, setSjfBaseSize, type RegisterSizeOptions, type SjfSize } from '../size'
 import { setSjfTheme, type SjfThemeName } from '../theme'
+import { setSjfMotion, type SjfMotionPreference } from '../motion'
 import {
   setSjfOverlayDefaults,
   setSjfOverlayMount,
@@ -14,10 +15,12 @@ export interface SjfUIOverlayConfig extends Partial<SjfOverlayDefaults> {
 export interface SjfUIConfig {
   defaultSize?: SjfSize
   theme?: SjfThemeName
+  motion?: SjfMotionPreference
   overlay?: SjfUIOverlayConfig
 }
 
 export function configureSjfUI(config: SjfUIConfig): void {
+  if (config.motion !== undefined) setSjfMotion(config.motion)
   if (config.defaultSize !== undefined) {
     setSjfBaseSize(config.defaultSize)
   }

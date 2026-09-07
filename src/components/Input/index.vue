@@ -35,6 +35,8 @@
         :value="localValue"
         :type="resolvedType"
         :name="props.name"
+        :aria-label="(attrs['aria-label'] as string | undefined) ?? props.label"
+        :aria-invalid="resolvedError || undefined"
         :placeholder="resolvedPlaceholder"
         :autocomplete="props.autocomplete"
         :required="resolvedRequired"

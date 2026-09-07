@@ -126,13 +126,25 @@ sjf-motion-none
 
 ## 5. Reduced Motion
 
-SJF 必须尊重系统：
+SJF 默认尊重系统：
 
 ```css
 @media (prefers-reduced-motion: reduce)
 ```
 
 开启减少动态效果后，SJF 组件 transition / animation 自动缩短至近乎即时，同时移除延迟。
+
+提供显式的用户偏好覆盖：
+
+```ts
+app.use(SJFUI, { motion: 'system' }) // 默认跟随系统
+SJFUI.setMotion('full')              // 用户主动要求完整动画
+SJFUI.setMotion('reduced')           // 用户主动要求减少动态效果
+```
+
+偏好同时作用于 CSS 过渡和 List 的滚动插值。文档站为了演示动画默认使用 `full`，并提供顶部切换按钮；这不改变组件库的 `system` 默认策略。
+
+单选指示器的外壳移动和内部填充动画相互独立：空→A 从中心展开，A→B 平滑移动，B→空向中心收回。分支展开仅对局部高度做过渡，不把布局动画扩散到整个页面。
 
 ---
 

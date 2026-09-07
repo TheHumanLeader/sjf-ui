@@ -633,16 +633,16 @@ kbd {
 @media (max-width: 720px) {
   :root {
     --docs-sidebar-width: 0px;
-    --docs-topbar-height: 58px;
+    --docs-topbar-height: 98px;
   }
 
   .docs-topbar {
-    grid-template-columns: auto 1fr;
+    grid-template-columns: 54px minmax(0, 1fr);
   }
 
   .brand {
     border-right: 0;
-    padding-inline: 14px;
+    padding-inline: 10px;
   }
 
   .brand-copy,
@@ -652,13 +652,18 @@ kbd {
   }
 
   .top-actions {
-    justify-content: flex-end;
-    padding-inline: 12px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 6px;
+    padding: 8px 12px 8px 0;
   }
 
   .docs-search {
-    width: min(360px, 62vw);
+    grid-column: 1 / -1;
+    width: 100%;
   }
+
+  .theme-toggle { white-space: nowrap; justify-content: center; }
 
   .docs-sidebar {
     display: none;

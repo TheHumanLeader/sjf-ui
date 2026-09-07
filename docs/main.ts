@@ -7,12 +7,14 @@ import './styles.css'
 import './theme.css'
 import './component-demo.css'
 import './list-demo.css'
+import {readPreviewMotion} from './preview'
 
 SJFUI.setTheme(readStoredSjfTheme())
 
 const app = createVaporApp(App)
 app.use(SJFUI, {
   defaultSize: 'nm',
+  motion: readPreviewMotion(),
   overlay: {
     mount: () => '#sjf-overlay-root',
   },
